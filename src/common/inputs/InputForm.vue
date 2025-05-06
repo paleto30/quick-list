@@ -14,8 +14,6 @@
     />
   </div>
 </template>
-
-<!-- script -->
 <script setup lang="ts">
 import { defineProps, defineEmits } from "vue";
 
@@ -31,8 +29,6 @@ defineEmits<{
   (e: "update:modelValue", value: string): void;
 }>();
 </script>
-<!-- end script -->
-
 <style scoped>
 .base-input {
   display: flex;

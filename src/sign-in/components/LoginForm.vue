@@ -38,7 +38,6 @@
   </form>
 </template>
 
-<!-- script -->
 <script setup lang="ts">
 import { ref } from "vue";
 import InputForm from "../../common/inputs/InputForm.vue";
@@ -47,6 +46,5 @@ import ButtonForm from "../../common/inputs/ButtonForm.vue";
 const email = ref<string>("");
 const password = ref<string>("");
 </script>
-<!-- end script -->
 
 <style scoped></style>

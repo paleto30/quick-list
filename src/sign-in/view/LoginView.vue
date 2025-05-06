@@ -32,11 +32,9 @@
   </div>
 </template>
 
-<!-- script -->
 <script setup lang="ts">
 import LoginForm from "../components/LoginForm.vue";
 </script>
-<!-- end script -->
 
 <style scoped>
 .container-view {

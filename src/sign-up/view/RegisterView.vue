@@ -32,11 +32,9 @@
     </div>
   </template>
   
-  <!-- script -->
   <script setup lang="ts">
   import RegisterForm from "../components/RegisterForm.vue";
   </script>
-  <!-- end script -->
   
   <style scoped>
   .container-view {
