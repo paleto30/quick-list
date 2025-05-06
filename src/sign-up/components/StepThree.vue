@@ -1,4 +1,3 @@
-<!-- src/components/register/StepThree.vue -->
 <template>
   <form @submit.prevent="handleSubmit">
     <p class="text-blue-400 text-center mb-6 font-[cursive]">
@@ -33,7 +32,7 @@ const form = computed({
 });
 
 const handleSubmit = () => {
-  console.log('codigo verificacion: ', form.value.verificationCode);
+  console.log("codigo verificacion: ", form.value.verificationCode);
   emit("submit", form.value); // Envía la solicitud al servidor
 };
 </script>

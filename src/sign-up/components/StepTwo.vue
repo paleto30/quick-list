@@ -1,4 +1,3 @@
-<!-- src/components/register/StepTwo.vue -->
 <template>
   <form @submit.prevent="handleSubmit">
     <h2 class="text-3xl text-blue-400 text-center mb-6 font-[cursive]">
