@@ -20,9 +20,13 @@ const routes: RouteRecordRaw[] = [
   },
   {
     path: "/groups",
-    name: 'Groups',
-    component: () => import("../groups/view/HomeView.vue"),
+    name: "Groups",
+    component: () => import("../groups/view/GroupsView.vue"),
   },
+  // {
+  //   path: "/nav",
+  //   component: () => import("../common/navbar/NavBar.vue"),
+  // },
 ];
 
 const router = createRouter({
