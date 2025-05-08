@@ -5,8 +5,14 @@
       Registrarse
     </h2>
 
-    <!-- name input -->
-    <InputForm v-model="form.name" name="name" label="Nombres" type="text" />
+    <!-- name -->
+    <InputForm
+      v-model="form.name"
+      name="name"
+      label="Nombres"
+      type="text"
+      :required="true"
+    />
 
     <!-- lastName -->
     <InputForm
@@ -14,10 +20,14 @@
       name="lastName"
       label="Apellidos"
       type="text"
+      :required="true"
     />
 
-    <!-- date input -->
-    <DateInput @update:birthdate="handleBirthdate" />
+    <!-- birthdate -->
+    <DatePicker
+      v-model="form.birthdate"
+      :required="true"
+    />
 
     <!-- botón -->
     <ButtonForm class="mb-2 mt-3" type="submit">Siguiente paso</ButtonForm>
@@ -37,12 +47,13 @@
 
 <script setup lang="ts">
 import { computed } from "vue";
-import InputForm from "../../common/inputs/InputForm.vue";
 import ButtonForm from "../../common/inputs/ButtonForm.vue";
-import DateInput from "../../common/inputs/DateInput.vue";
+import DatePicker from "../../common/inputs/DatePicker.vue";
+import InputForm from "../../common/inputs/InputForm.vue";
+import type { IRegisterData } from "../interfaces/register.interface";
 
 // Props y emits para v-model y navegación
-const props = defineProps<{ modelValue: any }>();
+const props = defineProps<{ modelValue: IRegisterData }>();
 const emit = defineEmits(["update:modelValue", "next"]);
 
 // Computed para trabajar con v-model en objeto
@@ -51,17 +62,18 @@ const form = computed({
   set: (value) => emit("update:modelValue", value),
 });
 
-const handleBirthdate = (date: {
-  day: number;
-  month: number;
-  year: number;
-}) => {
-  const birth = new Date(date.year, date.month - 1, date.day);
-  form.value.birthdate = birth;
-};
 
 const handleSubmit = () => {
+  if (!form.value.name || !form.value.lastName || !form.value.birthdate) {
+    alert("Todos los campos son obligatorios");
+    return;
+  }
   emit("update:modelValue", form.value); // asegúrate de emitir el modelo actualizado
   emit("next"); // avanzar al siguiente paso
 };
 </script>
+
+<style scoped>
+
+
+</style>

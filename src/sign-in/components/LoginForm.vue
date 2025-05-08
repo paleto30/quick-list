@@ -12,6 +12,7 @@
       label="Correo electronico"
       type="email"
       placeholder="ejemplo@dominio.com"
+      :required="true"
     />
 
     <!-- password -->
@@ -21,6 +22,7 @@
       label="Contraseña"
       type="password"
       placeholder="********"
+      :required="true"
     />
 
     <ButtonForm class="mb-2 mt-3" type="submit">Acceder</ButtonForm>

@@ -1,6 +1,6 @@
 import {
   createRouter,
-  createMemoryHistory,
+  createWebHistory,
   type RouteRecordRaw,
 } from "vue-router";
 
@@ -18,10 +18,15 @@ const routes: RouteRecordRaw[] = [
     path: "/sign-up",
     component: () => import("../sign-up/view/RegisterView.vue"),
   },
+  {
+    path: "/groups",
+    name: 'Groups',
+    component: () => import("../groups/view/HomeView.vue"),
+  },
 ];
 
 const router = createRouter({
-  history: createMemoryHistory(),
+  history: createWebHistory(),
   routes,
 });
 

@@ -1,6 +1,8 @@
 <template>
   <div class="base-input">
-    <label v-if="label" :for="name" class="input-label">{{ label }}</label>
+    <label v-if="label" :for="name" class="input-label"
+      >{{ label }} <span v-if="required" class="text-sky-500">*</span></label
+    >
     <input
       :id="name"
       :name="name"
@@ -23,6 +25,7 @@ defineProps<{
   name: string;
   label?: string;
   placeholder?: string;
+  required?: boolean;
 }>();
 
 defineEmits<{
