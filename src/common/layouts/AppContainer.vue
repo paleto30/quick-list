@@ -1,4 +1,3 @@
-<!-- src/layouts/BaseLayout.vue -->
 <template>
   <div class="min-h-screen bg-[#12151c] text-white">
     <MyNavbar class="shadow-md z-10" />

@@ -8,7 +8,7 @@
     >
       <h2 class="text-3xl text-gray-200 mb-2 pb-6">Regístrate en</h2>
       <h1
-        class="text-5xl md:text-8xl text-blue-400 text-justify pl-8 p-0 lg:pb-4 font-bold font-[sans] mb-4"
+        class="text-5xl md:text-8xl text-blue-400 text-justify pl-8 p-0 lg:pb-4 font-bold mb-4"
       >
         QuickList
       </h1>

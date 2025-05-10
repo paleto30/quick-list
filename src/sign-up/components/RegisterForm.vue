@@ -28,11 +28,10 @@
 </template>
 
 <script setup lang="ts">
-import { useRegister } from "../composables/useStepOne";
+import { useRegister } from "../composables/useRegister";
 import StepOne from "./StepOne.vue";
 import StepThree from "./StepThree.vue";
 import StepTwo from "./StepTwo.vue";
-
 
 const {
   currentStep,
