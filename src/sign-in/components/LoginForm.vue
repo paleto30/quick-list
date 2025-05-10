@@ -1,7 +1,7 @@
 <template>
   <form>
     <!-- Título -->
-    <h2 class="text-3xl text-blue-400 text-center mb-6 font-[cursive]">
+    <h2 class="text-3xl text-blue-400 text-center mb-6">
       Iniciar sesión
     </h2>
 
@@ -28,7 +28,7 @@
     <ButtonForm class="mb-2 mt-3" type="submit">Acceder</ButtonForm>
 
     <!-- Enlace a registro -->
-    <div class="mt-6 text-center text-sm text-gray-300 font-[cursive]">
+    <div class="mt-6 text-center text-sm text-gray-300 ">
       ¿Necesitas una cuenta?
       <RouterLink
         to="/sign-up"

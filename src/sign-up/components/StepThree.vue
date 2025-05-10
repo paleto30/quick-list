@@ -1,6 +1,6 @@
 <template>
   <form @submit.prevent="handleSubmit">
-    <p class="text-blue-400 text-center mb-6 font-[cursive]">
+    <p class="text-blue-400 text-center mb-6 ">
       Revisa tu correo electronico, recibiras un codigo de verificacion.
     </p>
 

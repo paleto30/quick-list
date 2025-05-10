@@ -1,8 +1,6 @@
 <template>
   <form @submit.prevent="handleSubmit">
-    <h2 class="text-3xl text-blue-400 text-center mb-6 font-[cursive]">
-      Paso 2
-    </h2>
+    <h2 class="text-3xl text-blue-400 text-center mb-6">Paso 2</h2>
 
     <!-- email input -->
     <InputForm

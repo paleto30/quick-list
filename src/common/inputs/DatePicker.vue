@@ -64,8 +64,16 @@ const formattedDate = computed(() => {
 // Emitir el valor de la fecha seleccionada para el modelo
 watch(selectedDate, (newVal) => {
   if (newVal) {
+    const date = new Date(newVal);
+    day.value = date.getDate().toString();
+    month.value = (date.getMonth() + 1).toString(); // +1 porque enero es 0
+    year.value = date.getFullYear().toString();
+
     emit("update:modelValue", new Date(newVal)); // Emitir la fecha completa
   } else {
+    day.value = "";
+    month.value = "";
+    year.value = "";
     emit("update:modelValue", null); // Enviar null si no se selecciona fecha
   }
 });

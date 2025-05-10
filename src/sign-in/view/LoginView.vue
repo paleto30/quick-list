@@ -6,16 +6,16 @@
     <div
       class="order-1 md:order-2 w-full max-w-2xl text-center md:text-left rounded-2xl p-8 mb-8 md:mb-0"
     >
-      <h2 class="text-3xl text-gray-200 mb-2 font-[cursive] pb-6">
+      <h2 class="text-3xl text-gray-200 mb-2 pb-6">
         Bienvenido a
       </h2>
       <h1
-        class="text-5xl md:text-8xl text-blue-400 text-justify pl-8 p-0 lg:pb-4 font-bold font-[cursive] mb-4"
+        class="text-5xl md:text-8xl text-blue-400 text-justify pl-8 p-0 lg:pb-4 font-bold mb-4"
       >
         QuickList
       </h1>
       <p
-        class="text-gray-200 text-md md:text-lg font-light text-center font-bold font-[cursive]"
+        class="text-gray-200 text-md md:text-lg font-light text-center font-bold "
       >
         La herramienta que te permite llevar <br />
         tus listas de asistencia de forma <br />

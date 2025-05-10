@@ -1,7 +1,7 @@
 <template>
   <form @submit.prevent="handleSubmit">
     <!-- Título -->
-    <h2 class="text-3xl text-blue-400 text-center mb-6 font-[cursive]">
+    <h2 class="text-3xl text-blue-400 text-center mb-6 ">
       Registrarse
     </h2>
 
@@ -33,7 +33,7 @@
     <ButtonForm class="mb-2 mt-3" type="submit">Siguiente paso</ButtonForm>
 
     <!-- Enlace a login -->
-    <div class="mt-6 text-center text-sm text-gray-300 font-[cursive]">
+    <div class="mt-6 text-center text-sm text-gray-300">
       ¿Ya tienes una cuenta?
       <RouterLink
         to="/sign-in"
