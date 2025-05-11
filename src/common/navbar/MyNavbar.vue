@@ -4,7 +4,9 @@
   >
     <!-- Logo -->
     <div class="flex items-center space-x-2">
-      <div class="w-6 h-6 rounded-full border border-blue-400"></div>
+      <div class="w-8 h-6 rounded-full ">
+        <img src="../../assets/vue.svg" alt="" srcset="">
+      </div>
       <span class="text-blue-400 font-semibold text-3xl md:text-3xl"
         >QuickList</span
       >

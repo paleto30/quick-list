@@ -1,6 +1,5 @@
 <template>
   <div>
-    <!-- Solo advertencia de campos vacíos -->
     <MyAlert
       v-if="showAlert"
       title="Formulario incompleto"
@@ -53,31 +52,37 @@ import { computed, ref } from "vue";
 import MyAlert from "../../common/alerts/MyAlert.vue";
 import type { INewGroupPayload } from "../interfaces/groups.interfaces";
 
+// 1) Defino explícitamente los props (camelCase):
+const props = defineProps({
+  institutionName: { type: String, default: "" },
+  subject: { type: String, default: "" },
+  referenceCode: { type: String, default: "" },
+});
+
+// 2) Las posibles emisiones:
 const emit = defineEmits<{
   (e: "submit", payload: INewGroupPayload): void;
   (e: "cancel"): void;
 }>();
 
+// 3) Form inicializándose con los props:
 const form = ref<INewGroupPayload>({
-  institutionName: "",
-  subject: "",
-  referenceCode: "",
+  institutionName: props.institutionName,
+  subject: props.subject,
+  referenceCode: props.referenceCode,
 });
 
 const showAlert = ref(false);
-
-const isFormValid = computed(() => {
-  return (
+const isFormValid = computed(
+  () =>
     form.value.institutionName.trim() !== "" &&
     form.value.subject.trim() !== "" &&
     form.value.referenceCode.trim() !== ""
-  );
-});
+);
 
 function submitForm() {
   if (isFormValid.value) {
     emit("submit", { ...form.value });
-    // El éxito lo maneja el padre, aquí solo cerramos la advertencia si está abierta
     showAlert.value = false;
   } else {
     showAlert.value = true;

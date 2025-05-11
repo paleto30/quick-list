@@ -1,5 +1,6 @@
 <template>
   <div
+    @click.prevent="$emit('click', id)"
     :class="[
       'rounded-xl border-2 p-3 text-center relative',
       borderColor,
@@ -21,7 +22,6 @@
         {{ code }}
       </div>
     </div>
-    <div class="absolute top-2 right-2 text-gray-400">⋮</div>
   </div>
 </template>
 
@@ -29,6 +29,7 @@
 import { computed } from "vue";
 
 const { border } = defineProps<{
+  id?: string
   title: string;
   subject: string;
   code: string;

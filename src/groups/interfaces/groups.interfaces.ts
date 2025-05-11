@@ -1,5 +1,3 @@
-
-
 export interface IGroup {
   id?: string;
   institutionName: string;
@@ -10,5 +8,9 @@ export interface IGroup {
   updatedAt?: Date;
 }
 
+export type INewGroupPayload = Pick<
+  IGroup,
+  "institutionName" | "subject" | "referenceCode"
+>;
 
-export type INewGroupPayload = Pick<IGroup, "institutionName" | "subject" | "referenceCode">;
+

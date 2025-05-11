@@ -1,0 +1,27 @@
+<template>
+  <div class="flex justify-center gap-4  border-gray-500 mt-4">
+    <button
+      v-for="(tab, i) in tabs"
+      :key="i"
+      :class="[
+        'border-b',
+        'py-2 px-3 text-sm sm:text-base',
+        { 'border-b-2 border-blue-400': currentTab === tab.value },
+      ]"
+      @click="$emit('update:currentTab', tab.value)"
+    >
+      <component :is="tab.icon" class="inline-block mr-1" />
+      {{ tab.label }}
+    </button>
+  </div>
+</template>
+
+<script setup lang="ts">
+import { defineEmits, defineProps } from "vue";
+
+defineProps<{
+  currentTab: string;
+  tabs: { label: string; value: string; icon: any }[];
+}>();
+defineEmits(["update:currentTab"]);
+</script>

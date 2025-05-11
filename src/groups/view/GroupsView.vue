@@ -43,12 +43,14 @@
           class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4"
         >
           <GroupCard
-            v-for="(group, index) in currentGroups"
+            v-for="(group, index) in activeGroups"
             :key="index"
+            :id="group.id"
             :title="group.institutionName"
             :subject="group.subject"
             :code="group.referenceCode"
             border="emerald"
+            @click="clickInGroup(group)"
           />
         </div>
       </transition>
@@ -80,10 +82,12 @@
           <GroupCard
             v-for="(group, index) in archivedGroups"
             :key="index"
+            :id="group.id"
             :title="group.institutionName"
             :subject="group.subject"
             :code="group.referenceCode"
             border="blue"
+            @click="clickInGroup(group)"
           />
         </div>
       </transition>
@@ -103,17 +107,29 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from "vue";
+import { computed, ref } from "vue";
 import MyAlert from "../../common/alerts/MyAlert.vue";
 import AppContainer from "../../common/layouts/AppContainer.vue";
 import MyModal from "../../common/modals/MyModal.vue";
 import CreateGroup from "../components/CreateGroup.vue";
 import GroupCard from "../components/GroupCard.vue";
 import { useGroups } from "../composables/useGroups";
-import type { INewGroupPayload } from "../interfaces/groups.interfaces";
+import type { INewGroupPayload, IGroup } from "../interfaces/groups.interfaces";
+import { useRouter } from "vue-router";
+import { useGroupStore } from "../groupStore";
 
-const { addNewGroup, currentGroups, archivedGroups } = useGroups();
+// router
+const router = useRouter();
 
+// group store
+const groupStore = useGroupStore();
+const activeGroups = computed(() => groupStore.activeGroups);
+const archivedGroups = computed(() => groupStore.archivedGroups);
+
+//composable
+const { addNewGroup } = useGroups();
+
+// component props
 const showGroups = ref(true);
 const showArchived = ref(false);
 const isAddGroupModalOpen = ref(false);
@@ -125,6 +141,12 @@ function handleCreateGroup(data: INewGroupPayload) {
   isAddGroupModalOpen.value = false;
   showSuccessAlert.value = true;
 }
+
+// redirect handler
+const clickInGroup = (group: IGroup) => {
+  groupStore.setGroup(group);
+  router.push({ name: "GroupDetail", params: { id: group?.id } });
+};
 </script>
 
 <style scoped>
