@@ -10,10 +10,10 @@
     <!-- Render Header solo si encontramos el grupo -->
     <GroupHeader
       v-if="group"
-      :id="groupSafe.id"
-      :institution="groupSafe.institutionName"
-      :subject="groupSafe.subject"
-      :code="groupSafe.referenceCode"
+      :id="group.id!"
+      :institution="group.institutionName"
+      :subject="group.subject"
+      :code="group.referenceCode"
     />
 
     <TabNavigation :tabs="tabs" v-model:currentTab="currentTab" />
@@ -59,10 +59,6 @@ const group = computed<IGroup | undefined>(() =>
   groupStore.groups.find((g) => g.id === groupId)
 );
 
-const groupSafe = computed(() => {
-  if (!group.value) throw new Error("Group is undefined");
-  return group.value;
-});
 
 // Tabs
 const currentTab = ref("assistance");

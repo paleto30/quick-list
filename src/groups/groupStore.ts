@@ -75,12 +75,12 @@ export const useGroupStore = defineStore(
       }
     };
 
-    const loadGroupsFromApi = async () => {
-      // Realiza una llamada a la API para cargar los grupos
-      //   const response = await fetch("/api/groups");
-      //   const data = await response.json();
-      //   groups.value = data;
-    };
+    // const loadGroupsFromApi = async () => {
+    //   Realiza una llamada a la API para cargar los grupos
+    //     const response = await fetch("/api/groups");
+    //     const data = await response.json();
+    //     groups.value = data;
+    // };
 
     return {
       //properties
