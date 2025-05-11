@@ -1,10 +1,10 @@
 <template>
-  <div class="flex justify-center gap-4  border-gray-500 mt-4">
+  <div class="flex justify-center gap-4 border-b border-gray-500 mt-4 pb-3">
     <button
       v-for="(tab, i) in tabs"
       :key="i"
       :class="[
-        'border-b',
+        'border rounded-md hover:bg-blue-900',
         'py-2 px-3 text-sm sm:text-base',
         { 'border-b-2 border-blue-400': currentTab === tab.value },
       ]"

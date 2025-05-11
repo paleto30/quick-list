@@ -68,7 +68,7 @@ const tabs = [
   { label: "Reports", value: "reports", icon: FileText },
 ];
 
-// Opcional: si quieres redirigir si no existe el grupo
+// Opcional: redirigir si no existe el grupo
 watch(group, (g) => {
   if (!g) router.replace("/groups");
 });

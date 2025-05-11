@@ -1,9 +1,7 @@
 <template>
   <form @submit.prevent="handleSubmit">
     <!-- Título -->
-    <h2 class="text-3xl text-blue-400 text-center mb-6 ">
-      Registrarse
-    </h2>
+    <h2 class="text-3xl text-blue-400 text-center mb-6">Registrarse</h2>
 
     <!-- name -->
     <InputForm
@@ -24,10 +22,7 @@
     />
 
     <!-- birthdate -->
-    <DatePicker
-      v-model="form.birthdate"
-      :required="true"
-    />
+    <DatePicker v-model="form.birthdate" :required="true" />
 
     <!-- botón -->
     <ButtonForm class="mb-2 mt-3" type="submit">Siguiente paso</ButtonForm>
@@ -54,7 +49,7 @@ import type { IRegisterData } from "../interfaces/register.interface";
 
 // Props y emits para v-model y navegación
 const props = defineProps<{ modelValue: IRegisterData }>();
-const emit = defineEmits(["update:modelValue", "next"]);
+const emit = defineEmits(["update:modelValue", "next", "alert"]);
 
 // Computed para trabajar con v-model en objeto
 const form = computed({
@@ -62,10 +57,18 @@ const form = computed({
   set: (value) => emit("update:modelValue", value),
 });
 
+const isFormValid = computed(
+  () =>
+    form.value.name.trim() !== "" &&
+    form.value.lastName.trim() !== "" &&
+    form.value.birthdate !== undefined
+);
 
 const handleSubmit = () => {
-  if (!form.value.name || !form.value.lastName || !form.value.birthdate) {
-    alert("Todos los campos son obligatorios");
+  console.log(!isFormValid.value);
+
+  if (!isFormValid.value) {
+    emit("alert", "Todos los campos son obligatorios");
     return;
   }
   emit("update:modelValue", form.value); // asegúrate de emitir el modelo actualizado
@@ -73,7 +76,4 @@ const handleSubmit = () => {
 };
 </script>
 
-<style scoped>
-
-
-</style>
+<style scoped></style>

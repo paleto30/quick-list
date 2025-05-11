@@ -3,7 +3,7 @@
     <MyAlert
       v-if="showAlert"
       title="Formulario incompleto"
-      type="warning"
+      type="info"
       :duration="3000"
       @close="showAlert = false"
     />

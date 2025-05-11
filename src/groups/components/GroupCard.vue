@@ -5,7 +5,7 @@
       'rounded-xl border-2 p-3 text-center relative',
       borderColor,
       'h-48 sm:h-56 md:h-48 lg:h-56', // Reducir altura en desktop
-      'transition-all duration-300 ease-in-out transform hover:scale-105 hover:shadow-xl hover:bg-gray-700 cursor-pointer',
+      'transition-all duration-300 ease-in-out transform hover:scale-105 hover:shadow-xl hover:bg-gray-900 cursor-pointer',
     ]"
   >
     <div class="flex flex-col justify-center h-full">
@@ -36,16 +36,17 @@ const { border } = defineProps<{
   border: BorderColor;
 }>();
 
-type BorderColor = "blue" | "green" | "red" | "yellow" | "emerald" | "purple";
+type BorderColor = "blue" | "green" | "red" | "yellow" | "emerald" | "purple" | "sky";
 
 const borderColor = computed(() => {
   const allowedBorders = {
-    blue: "border-blue-400",
+    blue: "border-blue-200",
     green: "border-green-500",
     red: "border-red-500",
     yellow: "border-yellow-500",
-    purple: "border-indigo-500",
+    purple: "border-indigo-400",
     emerald: "border-emerald-600",
+    sky: "border-sky-800",
   };
   return allowedBorders[border] || "border-gray-400";
 });

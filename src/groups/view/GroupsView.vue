@@ -4,7 +4,7 @@
     <MyAlert
       v-if="showSuccessAlert"
       title="Creado exitosamente"
-      type="success"
+      type="info"
       :duration="3000"
       @close="showSuccessAlert = false"
     />
@@ -49,7 +49,7 @@
             :title="group.institutionName"
             :subject="group.subject"
             :code="group.referenceCode"
-            border="emerald"
+            border="sky"
             @click="clickInGroup(group)"
           />
         </div>

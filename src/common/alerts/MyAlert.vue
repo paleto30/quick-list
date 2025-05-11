@@ -10,7 +10,7 @@
         'z-50',
         alertPosition,
       ]"
-      class="max-w-sm w-full p-4 rounded-md shadow-lg text-white"
+      class="max-w-sm w-full p-3 rounded-md shadow-lg text-white"
     >
       <div class="flex justify-between items-center">
         <div class="font-semibold">{{ title }}</div>
@@ -52,14 +52,17 @@ switch (props.type) {
     break;
   case "warning":
   default:
-    alertTypeClass.value = "bg-yellow-500";
+    alertTypeClass.value = "bg-yellow-600";
     break;
 }
 
 // Posición responsive
 const alertPosition = ref("right-4");
 onMounted(() => {
-  if (window.innerWidth < 768) {
+  if (window.innerWidth < 890) {
+    alertPosition.value = "left-4 right-2 top-4"; // márgenes laterales en móvil
+  }
+  if (window.innerWidth < 768 && window.innerWidth >= 600) {
     alertPosition.value = "left-2 right-2 top-4"; // márgenes laterales en móvil
   }
 });

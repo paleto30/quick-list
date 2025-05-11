@@ -1,6 +1,6 @@
 <template>
   <div
-    class="border p-3 rounded-md text-sm sm:text-base flex items-start lg:items-center relative"
+    class="border border-blue-500 p-3 rounded-md text-sm sm:text-base flex items-start lg:items-center relative"
   >
     <!-- Wrapper de campos -->
     <div class="flex flex-col lg:flex-row lg:justify-between flex-1">
