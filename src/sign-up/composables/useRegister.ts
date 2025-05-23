@@ -4,8 +4,15 @@ import type {
   ISignUpVerification,
 } from "../interfaces/register.interface";
 import router from "../../router";
+import { useUserStore } from "../../common/stores/userStore";
+import { useAuthStore } from "../../common/stores/authStore";
+import { apiFetch } from "../../api/api-client";
 
-export const useRegister = () => {
+export const useRegister = (handleAlert: (msg: string) => void) => {
+  /* stores */
+  const userStore = useUserStore();
+  const authStore = useAuthStore();
+
   //----------- properties -----------//
   // Control del paso actual
   const currentStep = ref(1);
@@ -23,31 +30,37 @@ export const useRegister = () => {
   // Datos del paso 3 (verificación)
   const verificationForm = ref<ISignUpVerification>({
     email: "",
-    verificationCode: "",
+    code: "",
   });
 
   //---------------- methods--------------//
-
   // siguiente paso
   const nextStep = () => {
     currentStep.value++;
-    console.log(currentStep.value);
   };
 
   // paso anterior
   const previousStep = () => {
-    console.log(currentStep.value);
     currentStep.value--;
-    console.log(currentStep.value);
   };
 
   // Llamado a la API cuando se completa el paso 2
-  const handleSubmitStepTwo = () => {
+  const handleSubmitStepTwo = async () => {
     try {
       const { passwordConfirm, ...dataToSend } = registerform.value;
       // Simular envío a la API
-      console.log("Registro enviado:", dataToSend);
+      const result = await apiFetch("/user-signup/step-one", {
+        method: "POST",
+        body: JSON.stringify({ ...dataToSend }),
+      });
 
+      if (!result.success) {
+        let message = result.error?.message || "Error al procesar el registro";
+        handleAlert(`${message} ❌`);
+        return;
+      }
+
+      handleAlert("Registro Exitoso ✅");
       // Guardar el correo para el paso 3
       verificationForm.value.email = registerform.value.email;
 
@@ -55,15 +68,57 @@ export const useRegister = () => {
       nextStep();
     } catch (error) {
       console.error("Error al registrar:", error);
-      alert("Hubo un error al registrar, por favor intenta nuevamente.");
+      handleAlert("ℹ️ Ocurrio un error, por favor intenta nuevamente. ");
     }
   };
 
   // Enviar código de verificación (paso 3)
-  const submitVerification = () => {
-    console.log("Verificando código:", verificationForm.value);
-    // Aquí deberías llamar a la API para validar el código
-    router.push({ name: "Groups" });
+  const submitVerification = async () => {
+    try {
+      // Aquí deberías llamar a la API para validar el código
+      const result = await apiFetch("/user-signup/step-two", {
+        method: "PATCH",
+        body: JSON.stringify(verificationForm.value),
+      });
+
+      if (!result.success) {
+        let message = result.error?.message || "Error al procesar el codigo.";
+        handleAlert(`${message} ❌`);
+        userStore.cleanUser();
+        router.push({ name: "Register" });
+        return;
+      }
+
+      const { accessToken } = result.data;
+
+      authStore.setAccessToken(accessToken);
+      handleAlert("Codigo verificado exitosamente ✅");
+
+      const myResult = await apiFetch(`/user/me`, {
+        method: "GET",
+      });
+
+      if (!myResult.success) {
+        let message =
+          myResult.error?.message ||
+          "Ocurrio un error al obtener la informacion del usuario.";
+        handleAlert(`${message} ❌`);
+        return;
+      }
+
+      userStore.setUser(myResult.data.user);
+
+      handleAlert("Bienvenido a QuickList ✅");
+
+      await new Promise((resolve) => setTimeout(resolve, 1500));
+
+      router.push({ name: "Groups" });
+      console.log("finnnnn");
+
+      return;
+    } catch (error) {
+      handleAlert("ℹ️ Ocurrio un error inesperado.");
+    }
   };
 
   return {

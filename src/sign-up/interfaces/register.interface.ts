@@ -9,5 +9,5 @@ export interface IRegisterData {
 
 export interface ISignUpVerification {
   email: string;
-  verificationCode: string;
+  code: string;
 }

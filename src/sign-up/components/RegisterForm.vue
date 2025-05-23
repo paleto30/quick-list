@@ -47,6 +47,11 @@ import MyAlert from "../../common/alerts/MyAlert.vue";
 const alertMessage = ref<string>("");
 const showAlert = ref(false);
 
+const handleAlert = (message: string) => {
+  alertMessage.value = message;
+  showAlert.value = true;
+};
+
 const {
   currentStep,
   nextStep,
@@ -55,12 +60,7 @@ const {
   verificationForm,
   handleSubmitStepTwo,
   submitVerification,
-} = useRegister();
-
-const handleAlert = (message: string) => {
-  alertMessage.value = message;
-  showAlert.value = true;
-};
+} = useRegister(handleAlert);
 </script>
 
 <style scoped>

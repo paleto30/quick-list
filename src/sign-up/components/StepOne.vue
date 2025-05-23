@@ -65,8 +65,6 @@ const isFormValid = computed(
 );
 
 const handleSubmit = () => {
-  console.log(!isFormValid.value);
-
   if (!isFormValid.value) {
     emit("alert", "Todos los campos son obligatorios");
     return;

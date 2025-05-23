@@ -1,12 +1,12 @@
 <template>
   <form @submit.prevent="handleSubmit">
-    <p class="text-blue-400 text-center mb-6 ">
+    <p class="text-blue-400 text-center mb-6">
       Revisa tu correo electronico, recibiras un codigo de verificacion.
     </p>
 
     <InputForm
-      v-model="form.verificationCode"
-      name="verificationCode"
+      v-model="form.code"
+      name="code"
       label="Ingrese el codigo"
       type="text"
       :required="true"
@@ -38,8 +38,8 @@ const form = computed({
 });
 
 const validateCode = () => {
-  const code = form.value.verificationCode?.trim();
-  return /^\d{6}$/.test(code); // Solo 6 dígitos numéricos
+  const code = form.value.code?.trim();
+  return /^[a-zA-Z0-9]{6}$/.test(code); // 6 caracteres alfanuméricos exactos
 };
 
 watch(
@@ -51,7 +51,7 @@ watch(
 );
 
 const handleSubmit = () => {
-  console.log("codigo verificacion: ", form.value.verificationCode);
+  console.log("codigo verificacion: ", form.value.code);
   emit("submit", form.value); // Envía la solicitud al servidor
 };
 </script>

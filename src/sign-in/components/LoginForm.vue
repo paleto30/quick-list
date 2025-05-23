@@ -1,9 +1,7 @@
 <template>
-  <form>
+  <form @submit.prevent="emitLogin">
     <!-- Título -->
-    <h2 class="text-3xl text-blue-400 text-center mb-6">
-      Iniciar sesión
-    </h2>
+    <h2 class="text-3xl text-blue-400 text-center mb-6">Iniciar sesión</h2>
 
     <!-- email input -->
     <InputForm
@@ -28,7 +26,7 @@
     <ButtonForm class="mb-2 mt-3" type="submit">Acceder</ButtonForm>
 
     <!-- Enlace a registro -->
-    <div class="mt-6 text-center text-sm text-gray-300 ">
+    <div class="mt-6 text-center text-sm text-gray-300">
       ¿Necesitas una cuenta?
       <RouterLink
         to="/sign-up"
@@ -47,6 +45,17 @@ import ButtonForm from "../../common/inputs/ButtonForm.vue";
 
 const email = ref<string>("");
 const password = ref<string>("");
+
+const emit = defineEmits<{
+  (e: "submit", payload: { email: string; password: string }): void;
+}>();
+
+const emitLogin = () => {
+  emit("submit", {
+    email: email.value,
+    password: password.value,
+  });
+};
 </script>
 
 <style scoped></style>
