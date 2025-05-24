@@ -43,7 +43,7 @@ export const useGroups = (
       alertHandler(result.error?.message);
       return;
     }
-    alertHandler(`Actualizacion completada ✅`);
+    alertHandler(`Grupo actualizado ✅`);
     groupsStore.updateGroup(id, payload);
   }
 

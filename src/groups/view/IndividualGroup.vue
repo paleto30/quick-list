@@ -19,6 +19,8 @@
 
     <TabNavigation :tabs="tabs" v-model:currentTab="currentTab" />
 
+    <StudentsList v-if="currentTab === 'students'" />
+
     <AssistanceActions v-if="currentTab === 'assistance'" />
 
     <ReusableTable
@@ -33,17 +35,17 @@
 </template>
 
 <script setup lang="ts">
+import { ClipboardList, FileText, Users } from "lucide-vue-next";
 import { computed, ref, watch } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import AppContainer from "../../common/layouts/AppContainer.vue";
+import ReusableTable from "../../common/tables/ReusableTable.vue";
 import AssistanceActions from "../components/AssistanceActions.vue";
 import GroupHeader from "../components/GroupHeader.vue";
 import TabNavigation from "../components/TabNavigation.vue";
-import ReusableTable from "../../common/tables/ReusableTable.vue";
-import { ClipboardList, FileText, Users } from "lucide-vue-next";
-
-import type { IGroup } from "../interfaces/groups.interfaces";
+import StudentsList from "../components/StudentsList.vue";
 import { useGroupStore } from "../groupStore";
+import type { IGroup } from "../interfaces/groups.interfaces";
 
 // router
 const route = useRoute();

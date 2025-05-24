@@ -41,7 +41,9 @@ const emit = defineEmits<{
 
 const formattedDate = computed(() => {
   if (!selectedDate.value) return "";
-  const date = new Date(selectedDate.value);
+
+  // Parsear la fecha manualmente para evitar problemas de zona horaria
+  const [year, month, day] = selectedDate.value.split("-").map(Number);
   const monthNames = [
     "enero",
     "febrero",
@@ -56,25 +58,23 @@ const formattedDate = computed(() => {
     "noviembre",
     "diciembre",
   ];
-  return `${date.getDate()} de ${
-    monthNames[date.getMonth()]
-  } del ${date.getFullYear()}`;
+
+  return `${day} de ${monthNames[month - 1]} del ${year}`;
 });
 
 // Emitir el valor de la fecha seleccionada para el modelo
 watch(selectedDate, (newVal) => {
   if (newVal) {
-    const date = new Date(newVal);
-    day.value = date.getDate().toString();
-    month.value = (date.getMonth() + 1).toString(); // +1 porque enero es 0
-    year.value = date.getFullYear().toString();
-
-    emit("update:modelValue", new Date(newVal)); // Emitir la fecha completa
+    const [y, m, d] = newVal.split("-").map(Number);
+    day.value = d.toString();
+    month.value = m.toString();
+    year.value = y.toString();
+    emit("update:modelValue", new Date(y, m - 1, d)); // aquí creas la fecha local sin zona horaria UTC
   } else {
     day.value = "";
     month.value = "";
     year.value = "";
-    emit("update:modelValue", null); // Enviar null si no se selecciona fecha
+    emit("update:modelValue", null);
   }
 });
 
