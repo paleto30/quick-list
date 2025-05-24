@@ -51,6 +51,13 @@ export const useGroupStore = defineStore(
       }
     };
 
+    const setStatusGroup = (id: string, status: "active" | "archived") => {
+      const idx = groups.value.findIndex((g) => g._id === id);
+      if (idx !== -1) {
+        groups.value[idx].status = status;
+      }
+    };
+
     return {
       //properties
       group,
@@ -64,6 +71,7 @@ export const useGroupStore = defineStore(
       updateGroup,
       setGroup,
       clearGroup,
+      setStatusGroup,
     };
   },
   {

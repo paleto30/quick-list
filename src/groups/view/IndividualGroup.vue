@@ -1,7 +1,7 @@
 <template>
   <AppContainer>
     <button
-      class="mb-4 text-sm border px-2 py-1 rounded"
+      class="mb-2 text-sm border border-blue-500 bg-gray-800 px-2 py-1 rounded text-blue-400"
       @click="router.back()"
     >
       ← back
@@ -14,6 +14,7 @@
       :institution="group.institutionName"
       :subject="group.subject"
       :code="group.referenceCode"
+      :status="group.status"
     />
 
     <TabNavigation :tabs="tabs" v-model:currentTab="currentTab" />

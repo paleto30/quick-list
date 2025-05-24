@@ -7,9 +7,9 @@
       <div class="w-8 h-6 rounded-full">
         <img src="../../../public/vite.svg" alt="" />
       </div>
-      <span class="text-blue-400 font-semibold text-3xl md:text-3xl">
+      <button class="text-blue-400 font-semibold text-3xl md:text-3xl">
         QuickList
-      </span>
+      </button>
     </div>
 
     <!-- User Icon -->
@@ -19,7 +19,7 @@
       }}</span>
       <button
         aria-label="User profile"
-        class="w-9 h-9 bg-sky-600 hover:bg-sky-600 text-white rounded-full shadow flex items-center justify-center transition-all"
+        class="w-9 h-9 bg-sky-700 hover:bg-sky-500 text-white rounded-full shadow flex items-center justify-center transition-all"
         @click="toggleMenu"
       >
         <svg
@@ -64,12 +64,22 @@ const menuContainer = ref<HTMLElement | null>(null);
 // Nombre capitalizado reactivo
 const name = computed(() => {
   const n = userStore.user?.name || "";
-  if (!n) return "";
-  return n.charAt(0).toUpperCase() + n.slice(1).toLowerCase();
+  return n ? capitalizarNombreCompleto(n) : "";
 });
 
 function toggleMenu() {
   showMenu.value = !showMenu.value;
+}
+
+function capitalizarNombreCompleto(nombre: string): string {
+  return nombre
+    .split(" ")
+    .filter(Boolean)
+    .map(
+      (palabra) =>
+        palabra.charAt(0).toUpperCase() + palabra.slice(1).toLowerCase()
+    )
+    .join(" ");
 }
 
 async function handleLogout() {
@@ -92,7 +102,7 @@ async function handleLogout() {
   userStore.cleanUser();
   authStore.clearAccesstoken();
 
-  await new Promise((resolve) => setTimeout(resolve, 1500));
+  await new Promise((resolve) => setTimeout(resolve, 1000));
 
   router.push({ name: "login" });
 }

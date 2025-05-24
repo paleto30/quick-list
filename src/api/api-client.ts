@@ -79,6 +79,7 @@ export const apiFetch = async (
     return json;
   } catch (error) {
     console.error("Error de red o conexión:", error);
+    router.push({ name: "login" });
     return {
       success: false,
       statusCode: 0,

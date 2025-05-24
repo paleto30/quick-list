@@ -3,11 +3,12 @@ import type {
   IRegisterData,
   ISignUpVerification,
 } from "../interfaces/register.interface";
-import router from "../../router";
+
 import { useUserStore } from "../../common/stores/userStore";
 import { useAuthStore } from "../../common/stores/authStore";
 import { apiFetch } from "../../api/api-client";
 import type { AlertType } from "../../common/alerts/useMyAlert";
+import { useRouter } from "vue-router";
 
 export const useRegister = (
   handleAlert: (title: string, msg?: string, type?: AlertType) => void
@@ -15,6 +16,7 @@ export const useRegister = (
   /* stores */
   const userStore = useUserStore();
   const authStore = useAuthStore();
+  const router = useRouter();
 
   //----------- properties -----------//
   // Control del paso actual
@@ -113,12 +115,9 @@ export const useRegister = (
 
       handleAlert("Bienvenido a QuickList ✅");
 
-      await new Promise((resolve) => setTimeout(resolve, 1500));
+      await new Promise((resolve) => setTimeout(resolve, 700));
 
       router.push({ name: "Groups" });
-      console.log("finnnnn");
-
-      return;
     } catch (error) {
       handleAlert("ℹ️ Ocurrio un error inesperado.");
     }

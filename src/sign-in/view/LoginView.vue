@@ -42,7 +42,6 @@ const { submitLogin } = useLogin(showAlert);
 
 const handleSubmit = async (payload: { email: string; password: string }) => {
   await submitLogin(payload);
-  router.push({ name: "Groups" });
 };
 </script>
 

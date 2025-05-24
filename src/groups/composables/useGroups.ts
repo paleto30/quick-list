@@ -1,8 +1,8 @@
 import { ref } from "vue";
-import { useGroupStore } from "../groupStore";
-import type { IGroup, INewGroupPayload } from "../interfaces/groups.interfaces";
 import { apiFetch } from "../../api/api-client";
 import type { AlertType } from "../../common/alerts/useMyAlert";
+import { useGroupStore } from "../groupStore";
+import type { IGroup, INewGroupPayload } from "../interfaces/groups.interfaces";
 
 export const useGroups = (
   alertHandler: (title: string, msg?: string, type?: AlertType) => void
@@ -40,8 +40,10 @@ export const useGroups = (
     });
 
     if (!result.success) {
+      alertHandler(result.error?.message);
+      return;
     }
-
+    alertHandler(`Actualizacion completada ✅`);
     groupsStore.updateGroup(id, payload);
   }
 
@@ -58,6 +60,20 @@ export const useGroups = (
     return;
   }
 
+  async function changeStatus(id: string, status: "active" | "archived") {
+    const result = await apiFetch(`/group/${id}/status`, {
+      method: "PATCH",
+      body: JSON.stringify({ status }),
+    });
+
+    if (!result.success) {
+      alertHandler(result.error?.message || "Error al cambiar el estado.");
+      return;
+    }
+
+    groupsStore.setStatusGroup(id, status);
+  }
+
   return {
     // properties
     formNewGroup,
@@ -66,5 +82,6 @@ export const useGroups = (
     addNewGroup,
     editGroup,
     loadGroupsFromDb,
+    changeStatus,
   };
 };

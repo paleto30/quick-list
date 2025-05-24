@@ -21,7 +21,6 @@ export const useLogin = (
         method: "POST",
         body: JSON.stringify(payload),
       });
-      console.log(result);
 
       if (!result.success) {
         const message = result.error?.message || "Credenciales inválidas.";
@@ -48,9 +47,9 @@ export const useLogin = (
 
       handleAlert("Bienvenido a QuickList ✅");
 
-      await new Promise((resolve) => setTimeout(resolve, 1500));
+      await new Promise((resolve) => setTimeout(resolve, 700));
 
-      // router.push({ name: "Groups" });
+      router.push({ name: "Groups" });
     } catch (error) {
       console.error("Error al hacer login:", error);
       handleAlert("Error inesperado, por favor intenta de nuevo. ❌");

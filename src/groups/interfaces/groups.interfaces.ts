@@ -10,7 +10,5 @@ export interface IGroup {
 
 export type INewGroupPayload = Pick<
   IGroup,
-  "institutionName" | "subject" | "referenceCode"
+  "institutionName" | "subject" | "referenceCode" | "status"
 >;
-
-
