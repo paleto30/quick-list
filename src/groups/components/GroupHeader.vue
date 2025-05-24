@@ -51,10 +51,9 @@
 import { Edit } from "lucide-vue-next";
 import { ref } from "vue";
 import MyModal from "../../common/modals/MyModal.vue";
-import CreateGroup from "./CreateGroup.vue";
-
-import { useGroupStore } from "../groupStore";
+import { useGroups } from "../composables/useGroups";
 import type { INewGroupPayload } from "../interfaces/groups.interfaces";
+import CreateGroup from "./CreateGroup.vue";
 
 // Ahora recibimos el ID del grupo
 const props = defineProps<{
@@ -65,7 +64,7 @@ const props = defineProps<{
 }>();
 
 // Pinia store
-const groupStore = useGroupStore();
+const { editGroup } = useGroups();
 
 const openEditor = ref(false);
 

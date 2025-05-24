@@ -45,7 +45,7 @@
           <GroupCard
             v-for="(group, index) in activeGroups"
             :key="index"
-            :id="group.id"
+            :id="group._id"
             :title="group.institutionName"
             :subject="group.subject"
             :code="group.referenceCode"
@@ -82,7 +82,7 @@
           <GroupCard
             v-for="(group, index) in archivedGroups"
             :key="index"
-            :id="group.id"
+            :id="group._id"
             :title="group.institutionName"
             :subject="group.subject"
             :code="group.referenceCode"
@@ -107,7 +107,7 @@
 </template>
 
 <script setup lang="ts">
-import { computed, ref } from "vue";
+import { computed, onMounted, ref } from "vue";
 import MyAlert from "../../common/alerts/MyAlert.vue";
 import AppContainer from "../../common/layouts/AppContainer.vue";
 import MyModal from "../../common/modals/MyModal.vue";
@@ -126,14 +126,30 @@ const groupStore = useGroupStore();
 const activeGroups = computed(() => groupStore.activeGroups);
 const archivedGroups = computed(() => groupStore.archivedGroups);
 
+const showAlert = ref(false);
+const alert = ref<{
+  title: string;
+  message: string;
+  type: string;
+} | null>(null);
+
+const handleAlert = (message: string, type: string = "info", title = " ") => {
+  alert.value = { title, message, type };
+  showAlert.value = true;
+};
+
 //composable
-const { addNewGroup } = useGroups();
+const { addNewGroup, loadGroupsFromDb } = useGroups(handleAlert);
 
 // component props
 const showGroups = ref(true);
 const showArchived = ref(false);
 const isAddGroupModalOpen = ref(false);
 const showSuccessAlert = ref(false);
+
+onMounted(async () => {
+  await loadGroupsFromDb();
+});
 
 // Cuando CreateGroup emite 'submit'
 function handleCreateGroup(data: INewGroupPayload) {
@@ -145,7 +161,7 @@ function handleCreateGroup(data: INewGroupPayload) {
 // redirect handler
 const clickInGroup = (group: IGroup) => {
   groupStore.setGroup(group);
-  router.push({ name: "GroupDetail", params: { id: group?.id } });
+  router.push({ name: "GroupDetail", params: { id: group?._id } });
 };
 </script>
 

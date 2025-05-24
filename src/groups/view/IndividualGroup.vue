@@ -10,7 +10,7 @@
     <!-- Render Header solo si encontramos el grupo -->
     <GroupHeader
       v-if="group"
-      :id="group.id!"
+      :id="group._id!"
       :institution="group.institutionName"
       :subject="group.subject"
       :code="group.referenceCode"
@@ -56,15 +56,14 @@ const groupStore = useGroupStore();
 
 // Computed para obtener el grupo directamente desde el array
 const group = computed<IGroup | undefined>(() =>
-  groupStore.groups.find((g) => g.id === groupId)
+  groupStore.groups.find((g) => g._id === groupId)
 );
 
-
 // Tabs
-const currentTab = ref("assistance");
+const currentTab = ref("students");
 const tabs = [
-  { label: "Take assistance", value: "assistance", icon: ClipboardList },
   { label: "Students", value: "students", icon: Users },
+  { label: "Take assistance", value: "assistance", icon: ClipboardList },
   { label: "Reports", value: "reports", icon: FileText },
 ];
 

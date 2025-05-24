@@ -1,8 +1,11 @@
 import { ref } from "vue";
 import { useGroupStore } from "../groupStore";
 import type { IGroup, INewGroupPayload } from "../interfaces/groups.interfaces";
+import { apiFetch } from "../../api/api-client";
 
-export const useGroups = () => {
+export const useGroups = (
+  alertHandler?: (msg: string, type?: string, title?: string) => void
+) => {
   const groupsStore = useGroupStore();
 
   // formulario basico para creacion de grupo
@@ -12,20 +15,45 @@ export const useGroups = () => {
     referenceCode: "",
   });
 
-  const addNewGroup = (group: INewGroupPayload) => {
-    const newGroup: IGroup = {
-      ...group,
-      id: crypto.randomUUID(),
-      status: "active",
-      createdAt: new Date(),
-      updatedAt: new Date(),
-    };
+  const addNewGroup = async (group: INewGroupPayload) => {
+    const result = await apiFetch("/group", {
+      method: "POST",
+      body: JSON.stringify(group),
+    });
 
-    groupsStore.addNewGroup(newGroup);
+    if (!result.success) {
+      let msg = result.error?.message || "Error al obtener grupos";
+      alertHandler!(msg, "warning");
+      return;
+    }
+
+    groupsStore.addNewGroup(result.data);
+    return;
   };
 
-  function editGroup(id: string, payload: INewGroupPayload) {
+  async function editGroup(id: string, payload: INewGroupPayload) {
+    const result = await apiFetch(`/group/${id}`, {
+      method: "PUT",
+      body: JSON.stringify(payload),
+    });
+
+    if (!result.success) {
+    }
+
     groupsStore.updateGroup(id, payload);
+  }
+
+  async function loadGroupsFromDb() {
+    const result = await apiFetch("/group");
+
+    if (!result.success) {
+      let msg = result.error?.message || "Error al obtener grupos";
+      alertHandler!(msg, "warning");
+      return;
+    }
+
+    groupsStore.setGroups(result.data);
+    return;
   }
 
   return {
@@ -35,5 +63,6 @@ export const useGroups = () => {
     // methods
     addNewGroup,
     editGroup,
+    loadGroupsFromDb,
   };
 };

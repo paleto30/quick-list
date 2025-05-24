@@ -14,10 +14,13 @@
     </div>
 
     <!-- User Icon -->
-    <div>
+    <div class="flex items-center justify-center">
+      <span class="text-sky-500 mr-2 drop-shadow-md font-semibold">{{
+        name
+      }}</span>
       <button
         aria-label="User profile"
-        class="text-white hover:text-blue-300 transition-colors"
+        class="w-9 h-9 bg-sky-600 hover:bg-sky-600 text-white rounded-full shadow flex items-center justify-center transition-all"
         @click="toggleMenu"
       >
         <svg
@@ -37,22 +40,21 @@
       </button>
 
       <!-- Mostrar el menú sólo si showMenu es true -->
-      <UserMenu v-if="showMenu" @logout="handleLogout" class="right-5" />
-
-      <!-- Alerta de éxito global -->
-      <MyAlert
-        v-if="showAlert"
-        :title="alertMessage"
-        type="info"
-        :duration="3000"
-        @close="showAlert = false"
-      />
+      <UserMenu v-if="showMenu" @logout="handleLogout" class="right-3  top-12" />
     </div>
+    <!-- Alerta de éxito global -->
+    <MyAlert
+      v-if="showAlert"
+      :title="alertMessage"
+      type="info"
+      :duration="3000"
+      @close="showAlert = false"
+    />
   </header>
 </template>
 
 <script setup lang="ts">
-import { ref } from "vue";
+import { computed, onMounted, ref } from "vue";
 import { useRouter } from "vue-router";
 import { apiFetch } from "../../api/api-client";
 import MyAlert from "../alerts/MyAlert.vue";
@@ -67,6 +69,13 @@ const alertMessage = ref<string>("");
 const showAlert = ref(false);
 const showMenu = ref(false);
 
+const userName = ref("");
+const name = computed(() => capitalizarNombre(userName.value));
+
+onMounted(() => {
+  userName.value = userStore.user?.name!;
+});
+
 const handleAlert = (message: string) => {
   alertMessage.value = message;
   showAlert.value = true;
@@ -74,6 +83,11 @@ const handleAlert = (message: string) => {
 
 function toggleMenu() {
   showMenu.value = !showMenu.value;
+}
+
+function capitalizarNombre(nombre: string): string {
+  if (!nombre) return "";
+  return nombre.charAt(0).toUpperCase() + nombre.slice(1).toLowerCase();
 }
 
 async function handleLogout() {
@@ -117,4 +131,8 @@ function onClickOutside(event: MouseEvent) {
 window.addEventListener("click", onClickOutside);
 </script>
 
-<style scoped></style>
+<style scoped>
+.text-relieve {
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+}
+</style>

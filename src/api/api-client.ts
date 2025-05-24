@@ -7,7 +7,7 @@ const router = useRouter();
 
 export const tryRefreshToken = async (): Promise<boolean> => {
   try {
-    const res = await fetch(`${config.apiBaseUrl}/user-login/refresh-tokens`, {
+    const res = await fetch(`${config.apiBaseUrl}/auth/refresh-tokens`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       credentials: "include",

@@ -1,5 +1,5 @@
 export interface IGroup {
-  id?: string;
+  _id?: string;
   institutionName: string;
   subject: string;
   referenceCode: string;
