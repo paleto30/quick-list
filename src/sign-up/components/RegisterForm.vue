@@ -1,13 +1,5 @@
 <template>
   <div>
-    <!-- Alerta de éxito global -->
-    <MyAlert
-      v-if="showAlert"
-      :title="alertMessage"
-      type="info"
-      :duration="3000"
-      @close="showAlert = false"
-    />
     <!-- Paso 1: Nombre, Apellidos y Fecha de nacimiento -->
     <StepOne
       v-if="currentStep === 1"
@@ -37,19 +29,16 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from "vue";
+import { useAlert } from "../../common/alerts/useMyAlert"; // Ajusta ruta según corresponda
 import { useRegister } from "../composables/useRegister";
 import StepOne from "./StepOne.vue";
 import StepThree from "./StepThree.vue";
 import StepTwo from "./StepTwo.vue";
-import MyAlert from "../../common/alerts/MyAlert.vue";
 
-const alertMessage = ref<string>("");
-const showAlert = ref(false);
+const alert = useAlert();
 
 const handleAlert = (message: string) => {
-  alertMessage.value = message;
-  showAlert.value = true;
+  alert.showAlert(message);
 };
 
 const {

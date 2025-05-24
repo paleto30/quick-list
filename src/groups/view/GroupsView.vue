@@ -1,14 +1,5 @@
 <template>
   <AppContainer>
-    <!-- Alerta de éxito global -->
-    <MyAlert
-      v-if="showSuccessAlert"
-      title="Creado exitosamente"
-      type="info"
-      :duration="3000"
-      @close="showSuccessAlert = false"
-    />
-
     <!-- Encabezado de grupos con botón “add group +” -->
     <section class="mb-4">
       <div class="flex justify-end mb-2">
@@ -108,7 +99,6 @@
 
 <script setup lang="ts">
 import { computed, onMounted, ref } from "vue";
-import MyAlert from "../../common/alerts/MyAlert.vue";
 import AppContainer from "../../common/layouts/AppContainer.vue";
 import MyModal from "../../common/modals/MyModal.vue";
 import CreateGroup from "../components/CreateGroup.vue";
@@ -117,6 +107,7 @@ import { useGroups } from "../composables/useGroups";
 import type { INewGroupPayload, IGroup } from "../interfaces/groups.interfaces";
 import { useRouter } from "vue-router";
 import { useGroupStore } from "../groupStore";
+import { useAlert } from "../../common/alerts/useMyAlert";
 
 // router
 const router = useRouter();
@@ -126,26 +117,17 @@ const groupStore = useGroupStore();
 const activeGroups = computed(() => groupStore.activeGroups);
 const archivedGroups = computed(() => groupStore.archivedGroups);
 
-const showAlert = ref(false);
-const alert = ref<{
-  title: string;
-  message: string;
-  type: string;
-} | null>(null);
+//alert
 
-const handleAlert = (message: string, type: string = "info", title = " ") => {
-  alert.value = { title, message, type };
-  showAlert.value = true;
-};
+const { showAlert } = useAlert();
 
 //composable
-const { addNewGroup, loadGroupsFromDb } = useGroups(handleAlert);
+const { addNewGroup, loadGroupsFromDb } = useGroups(showAlert);
 
 // component props
 const showGroups = ref(true);
 const showArchived = ref(false);
 const isAddGroupModalOpen = ref(false);
-const showSuccessAlert = ref(false);
 
 onMounted(async () => {
   await loadGroupsFromDb();
@@ -155,7 +137,6 @@ onMounted(async () => {
 function handleCreateGroup(data: INewGroupPayload) {
   addNewGroup(data);
   isAddGroupModalOpen.value = false;
-  showSuccessAlert.value = true;
 }
 
 // redirect handler

@@ -5,16 +5,15 @@
     <!-- Logo -->
     <div class="flex items-center space-x-2">
       <div class="w-8 h-6 rounded-full">
-        <img src="../../../public/vite.svg" alt="" srcset="" />
+        <img src="../../../public/vite.svg" alt="" />
       </div>
-      <span class="text-blue-400 font-semibold text-3xl md:text-3xl"
-        >QuickList</span
-      >
-      <!-- Modificado -->
+      <span class="text-blue-400 font-semibold text-3xl md:text-3xl">
+        QuickList
+      </span>
     </div>
 
     <!-- User Icon -->
-    <div class="flex items-center justify-center">
+    <div class="flex items-center justify-center" ref="menuContainer">
       <span class="text-sky-500 mr-2 drop-shadow-md font-semibold">{{
         name
       }}</span>
@@ -39,55 +38,38 @@
         </svg>
       </button>
 
-      <!-- Mostrar el menú sólo si showMenu es true -->
-      <UserMenu v-if="showMenu" @logout="handleLogout" class="right-3  top-12" />
+      <!-- Mostrar menú solo si showMenu es true -->
+      <UserMenu v-if="showMenu" @logout="handleLogout" class="right-3 top-12" />
     </div>
-    <!-- Alerta de éxito global -->
-    <MyAlert
-      v-if="showAlert"
-      :title="alertMessage"
-      type="info"
-      :duration="3000"
-      @close="showAlert = false"
-    />
   </header>
 </template>
 
 <script setup lang="ts">
-import { computed, onMounted, ref } from "vue";
+import { computed, onMounted, onUnmounted, ref } from "vue";
 import { useRouter } from "vue-router";
 import { apiFetch } from "../../api/api-client";
-import MyAlert from "../alerts/MyAlert.vue";
 import { useAuthStore } from "../stores/authStore";
 import { useUserStore } from "../stores/userStore";
 import UserMenu from "./UserMenu.vue";
+import { useAlert } from "../alerts/useMyAlert"; // Ajusta ruta si hace falta
 
 const router = useRouter();
 const userStore = useUserStore();
 const authStore = useAuthStore();
-const alertMessage = ref<string>("");
-const showAlert = ref(false);
+const alert = useAlert();
+
 const showMenu = ref(false);
+const menuContainer = ref<HTMLElement | null>(null);
 
-const userName = ref("");
-const name = computed(() => capitalizarNombre(userName.value));
-
-onMounted(() => {
-  userName.value = userStore.user?.name!;
+// Nombre capitalizado reactivo
+const name = computed(() => {
+  const n = userStore.user?.name || "";
+  if (!n) return "";
+  return n.charAt(0).toUpperCase() + n.slice(1).toLowerCase();
 });
-
-const handleAlert = (message: string) => {
-  alertMessage.value = message;
-  showAlert.value = true;
-};
 
 function toggleMenu() {
   showMenu.value = !showMenu.value;
-}
-
-function capitalizarNombre(nombre: string): string {
-  if (!nombre) return "";
-  return nombre.charAt(0).toUpperCase() + nombre.slice(1).toLowerCase();
 }
 
 async function handleLogout() {
@@ -98,13 +80,14 @@ async function handleLogout() {
   });
 
   if (!res.success) {
-    handleAlert(`${res.error?.message || "Error al cierre de sesion"} ❌`);
+    alert.showAlert(`${res.error?.message || "Error al cierre de sesión"} ❌`);
     userStore.cleanUser();
     authStore.clearAccesstoken();
     router.push({ name: "login" });
     return;
   }
-  handleAlert("Cerrando sesión...");
+
+  alert.showAlert("Cerrando sesión...");
 
   userStore.cleanUser();
   authStore.clearAccesstoken();
@@ -116,19 +99,26 @@ async function handleLogout() {
 
 // Cerrar menú si click fuera del menú
 function onClickOutside(event: MouseEvent) {
-  const menu = document.querySelector(".absolute.right-0.mt-2");
-  const button = event.target as HTMLElement;
+  if (!menuContainer.value) return;
+
+  const target = event.target as Node;
+
   if (
     showMenu.value &&
-    menu &&
-    !menu.contains(event.target as Node) &&
-    !button.closest('button[aria-label="User profile"]')
+    menuContainer.value &&
+    !menuContainer.value.contains(target)
   ) {
     showMenu.value = false;
   }
 }
 
-window.addEventListener("click", onClickOutside);
+onMounted(() => {
+  window.addEventListener("click", onClickOutside);
+});
+
+onUnmounted(() => {
+  window.removeEventListener("click", onClickOutside);
+});
 </script>
 
 <style scoped>

@@ -2,9 +2,10 @@ import { ref } from "vue";
 import { useGroupStore } from "../groupStore";
 import type { IGroup, INewGroupPayload } from "../interfaces/groups.interfaces";
 import { apiFetch } from "../../api/api-client";
+import type { AlertType } from "../../common/alerts/useMyAlert";
 
 export const useGroups = (
-  alertHandler?: (msg: string, type?: string, title?: string) => void
+  alertHandler: (title: string, msg?: string, type?: AlertType) => void
 ) => {
   const groupsStore = useGroupStore();
 
@@ -23,10 +24,11 @@ export const useGroups = (
 
     if (!result.success) {
       let msg = result.error?.message || "Error al obtener grupos";
-      alertHandler!(msg, "warning");
+      alertHandler(msg, "warning");
       return;
     }
 
+    alertHandler("Creado exitosamente ✅");
     groupsStore.addNewGroup(result.data);
     return;
   };
@@ -48,7 +50,7 @@ export const useGroups = (
 
     if (!result.success) {
       let msg = result.error?.message || "Error al obtener grupos";
-      alertHandler!(msg, "warning");
+      alertHandler(msg, "warning");
       return;
     }
 

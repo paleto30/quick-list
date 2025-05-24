@@ -1,13 +1,5 @@
 <template>
   <div>
-    <MyAlert
-      v-if="showAlert"
-      title="Formulario incompleto"
-      type="info"
-      :duration="3000"
-      @close="showAlert = false"
-    />
-
     <form @submit.prevent="submitForm" class="space-y-3">
       <input
         v-model="form.institutionName"
@@ -49,30 +41,31 @@
 
 <script setup lang="ts">
 import { computed, ref } from "vue";
-import MyAlert from "../../common/alerts/MyAlert.vue";
 import type { INewGroupPayload } from "../interfaces/groups.interfaces";
+import { useAlert } from "../../common/alerts/useMyAlert";
+// Ajusta ruta si hace falta
 
-// 1) Defino explícitamente los props (camelCase):
+// Props
 const props = defineProps({
   institutionName: { type: String, default: "" },
   subject: { type: String, default: "" },
   referenceCode: { type: String, default: "" },
 });
 
-// 2) Las posibles emisiones:
+// Emits
 const emit = defineEmits<{
   (e: "submit", payload: INewGroupPayload): void;
   (e: "cancel"): void;
 }>();
 
-// 3) Form inicializándose con los props:
+const alert = useAlert();
+
 const form = ref<INewGroupPayload>({
   institutionName: props.institutionName,
   subject: props.subject,
   referenceCode: props.referenceCode,
 });
 
-const showAlert = ref(false);
 const isFormValid = computed(
   () =>
     form.value.institutionName.trim() !== "" &&
@@ -83,9 +76,8 @@ const isFormValid = computed(
 function submitForm() {
   if (isFormValid.value) {
     emit("submit", { ...form.value });
-    showAlert.value = false;
   } else {
-    showAlert.value = true;
+    alert.showAlert("Formulario incompleto", "info");
   }
 }
 </script>

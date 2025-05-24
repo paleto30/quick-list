@@ -71,6 +71,6 @@ const openEditor = ref(false);
 // Al recibir submit, actualizamos directamente el store
 function handleUpdate(payload: INewGroupPayload) {
   openEditor.value = false;
-  groupStore.updateGroup(props.id, payload);
+  // groupStore.updateGroup(props.id, payload);
 }
 </script>

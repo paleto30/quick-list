@@ -22,60 +22,52 @@
 </template>
 
 <script setup lang="ts">
-import { defineEmits, defineProps, onMounted, ref } from "vue";
+import { defineEmits, defineProps, ref, computed, onMounted } from "vue";
 
 const props = defineProps<{
+  visible: boolean; // Visibilidad controlada desde afuera
   title: string;
   message?: string;
   type?: "success" | "warning" | "error" | "info";
-  duration?: number;
 }>();
 
-// emitimos el cierre para que el padre reponga su v‑if
+// Emitimos evento para que el padre controle el cierre
 const emit = defineEmits<{
   (e: "close"): void;
 }>();
 
-const visible = ref(true);
+// No hay estado local visible, usamos prop
 
-// Color según tipo
-const alertTypeClass = ref("bg-yellow-500");
-switch (props.type) {
-  case "success":
-    alertTypeClass.value = "bg-green-500";
-    break;
-  case "error":
-    alertTypeClass.value = "bg-red-500";
-    break;
-  case "info":
-    alertTypeClass.value = "bg-blue-500";
-    break;
-  case "warning":
-  default:
-    alertTypeClass.value = "bg-yellow-600";
-    break;
-}
+// Computed para la clase según tipo
+const alertTypeClass = computed(() => {
+  switch (props.type) {
+    case "success":
+      return "bg-green-500";
+    case "error":
+      return "bg-red-500";
+    case "info":
+      return "bg-blue-500";
+    case "warning":
+    default:
+      return "bg-yellow-600";
+  }
+});
 
 // Posición responsive
 const alertPosition = ref("right-4");
 onMounted(() => {
   if (window.innerWidth < 890) {
-    alertPosition.value = "left-4 right-2 top-4"; // márgenes laterales en móvil
+    alertPosition.value = "left-4 right-2 top-4"; // márgenes en móvil
   }
   if (window.innerWidth < 768 && window.innerWidth >= 600) {
-    alertPosition.value = "left-2 right-2 top-4"; // márgenes laterales en móvil
+    alertPosition.value = "left-2 right-2 top-4";
   }
 });
 
+// Método para emitir cierre
 const closeAlert = () => {
-  visible.value = false;
   emit("close");
 };
-
-onMounted(() => {
-  const alertDuration = props.duration ?? 5000;
-  setTimeout(closeAlert, alertDuration);
-});
 </script>
 
 <style scoped>

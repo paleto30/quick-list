@@ -1,16 +1,16 @@
 import { ref } from "vue";
 
-type AlertType = "success" | "warning" | "error" | "info";
+export type AlertType = "success" | "warning" | "error" | "info";
 
 const visible = ref(false);
-const message = ref("");
+const message = ref<string | undefined>("");
 const title = ref("");
 const type = ref<AlertType>("info");
 
 const showAlert = (
-  msg: string,
-  alertType: AlertType = "info",
-  alertTitle = "Aviso"
+  alertTitle: string,
+  msg?: string,
+  alertType: AlertType = "info"
 ) => {
   message.value = msg;
   type.value = alertType;

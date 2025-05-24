@@ -7,8 +7,11 @@ import router from "../../router";
 import { useUserStore } from "../../common/stores/userStore";
 import { useAuthStore } from "../../common/stores/authStore";
 import { apiFetch } from "../../api/api-client";
+import type { AlertType } from "../../common/alerts/useMyAlert";
 
-export const useRegister = (handleAlert: (msg: string) => void) => {
+export const useRegister = (
+  handleAlert: (title: string, msg?: string, type?: AlertType) => void
+) => {
   /* stores */
   const userStore = useUserStore();
   const authStore = useAuthStore();

@@ -2,14 +2,6 @@
   <div
     class="min-h-screen bg-[#0a0f1a] text-white flex flex-col md:flex-row items-center justify-center p-4"
   >
-    <!-- Alerta de éxito global -->
-    <MyAlert
-      v-if="showAlert"
-      :title="alertMessage"
-      type="info"
-      :duration="3000"
-      @close="showAlert = false"
-    />
     <!-- Contenedor del texto descriptivo -->
     <div
       class="order-1 md:order-2 w-full max-w-2xl text-center md:text-left rounded-2xl p-8 mb-8 md:mb-0"
@@ -39,22 +31,18 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from "vue";
+import { useRouter } from "vue-router";
+import { useAlert } from "../../common/alerts/useMyAlert";
 import LoginForm from "../components/LoginForm.vue";
 import { useLogin } from "../composable/useLogin";
-import MyAlert from "../../common/alerts/MyAlert.vue";
 
-const alertMessage = ref<string>("");
-const showAlert = ref(false);
+const { showAlert } = useAlert();
+const router = useRouter();
+const { submitLogin } = useLogin(showAlert);
 
-const handleAlert = (message: string) => {
-  alertMessage.value = message;
-  showAlert.value = true;
-};
-const { submitLogin } = useLogin(handleAlert);
-
-const handleSubmit = (payload: { email: string; password: string }) => {
-  submitLogin(payload);
+const handleSubmit = async (payload: { email: string; password: string }) => {
+  await submitLogin(payload);
+  router.push({ name: "Groups" });
 };
 </script>
 
