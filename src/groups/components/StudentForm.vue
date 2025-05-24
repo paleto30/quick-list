@@ -178,6 +178,8 @@ const isFormValid = computed(() => {
 
 function submitForm() {
   if (isFormValid.value) {
+    console.log({ ...form.value });
+
     emit("submit", { ...form.value });
   } else {
     showAlert("Porfavor complete los campos.");

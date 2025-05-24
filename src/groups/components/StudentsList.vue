@@ -13,7 +13,7 @@
         students.map((s) => ({
           Nombre: s.name,
           Apellidos: s.lastName,
-          Edad: s.age,
+          Edad: calculateAge(s.birthday),
           Email: s.email,
           Celular: s.phone,
           Estado: s.status,
@@ -36,10 +36,10 @@ import ReusableTable from "../../common/tables/ReusableTable.vue";
 import MyModal from "../../common/modals/MyModal.vue";
 import StudentForm from "./StudentForm.vue";
 import type { Student } from "../interfaces/student.interfaces";
+import { calculateAge } from "../utils/calculate-age";
 
 const openForm = ref(false);
 
-// Simulamos datos, en realidad vendrían de store o API
 const students = ref<Student[]>([
   {
     id: "1",
@@ -47,7 +47,7 @@ const students = ref<Student[]>([
     dni: "10074389045",
     name: "Alice Danni",
     lastName: "Johnson",
-    age: 28,
+    birthday: new Date("1995-06-15"),
     image: "",
     phone: "3155113022",
     email: "alice@mail.com",
@@ -59,7 +59,7 @@ const students = ref<Student[]>([
     dni: "10074389045",
     name: "Bob Jhoin",
     lastName: "Smith",
-    age: 28,
+    birthday: new Date("1994-09-30"),
     image: "",
     phone: "3223218127",
     email: "bob@mail.com",
@@ -68,7 +68,6 @@ const students = ref<Student[]>([
 ]);
 
 function handleCreate(newStudent: Omit<Student, "id">) {
-  // En producción generar id o pedir al backend
   students.value.push({ id: String(Date.now()), ...newStudent });
   openForm.value = false;
 }
