@@ -4,7 +4,7 @@
       class="mb-2 text-sm border border-blue-500 bg-gray-800 px-2 py-1 rounded text-blue-400"
       @click="router.back()"
     >
-      ← back
+      ← grupos
     </button>
 
     <!-- Render Header solo si encontramos el grupo -->
@@ -63,12 +63,15 @@ const group = computed<IGroup | undefined>(() =>
 );
 
 // Tabs
-const currentTab = ref("students");
+const currentTab = ref(localStorage.getItem("currentTab") || "assistance");
 const tabs = [
-  { label: "Students", value: "students", icon: Users },
-  { label: "Take assistance", value: "assistance", icon: ClipboardList },
-  { label: "Reports", value: "reports", icon: FileText },
+  { label: "Estudiantes", value: "students", icon: Users },
+  { label: "Asistencia", value: "assistance", icon: ClipboardList },
+  { label: "Reportes", value: "reports", icon: FileText },
 ];
+watch(currentTab, (val) => {
+  localStorage.setItem("currentTab", val);
+});
 
 // Opcional: redirigir si no existe el grupo
 watch(group, (g) => {

@@ -5,19 +5,19 @@
       <input
         v-model="form.dni"
         type="text"
-        placeholder="DNI"
+        placeholder="documento identidad"
         class="w-full px-4 py-2 rounded bg-gray-800 border border-gray-600 text-white"
       />
       <input
         v-model="form.name"
         type="text"
-        placeholder="First name"
+        placeholder="Nombres"
         class="w-full px-4 py-2 rounded bg-gray-800 border border-gray-600 text-white"
       />
       <input
         v-model="form.lastName"
         type="text"
-        placeholder="Last name"
+        placeholder="Apellidos"
         class="w-full px-4 py-2 rounded bg-gray-800 border border-gray-600 text-white"
       />
 
@@ -33,7 +33,7 @@
       <input
         v-model="form.phone"
         type="tel"
-        placeholder="Phone"
+        placeholder="teléfono"
         class="w-full px-4 py-2 rounded bg-gray-800 border border-gray-600 text-white"
       />
 
@@ -53,7 +53,7 @@
             @click="openCamera"
             class="px-3 py-2 rounded bg-gray-700 hover:bg-gray-600 text-sm text-white"
           >
-            📷 Open Camera
+            📷 Abrir camara
           </button>
 
           <button
@@ -62,7 +62,7 @@
             :disabled="!videoActive"
             class="px-3 py-2 rounded bg-gray-700 hover:bg-gray-600 text-sm text-white"
           >
-            📸 Capture
+            📸 Capturar
           </button>
 
           <button
@@ -71,13 +71,13 @@
             :disabled="!form.image && !videoActive"
             class="px-3 py-2 rounded bg-red-700 hover:bg-red-600 text-sm text-white"
           >
-            ❌ Clear
+            ❌ limpiar
           </button>
 
           <label
             class="cursor-pointer px-3 py-2 rounded bg-gray-700 hover:bg-gray-600 text-sm text-white"
           >
-            📁 Upload
+            📁 cargar
             <input
               type="file"
               accept="image/*"
@@ -107,13 +107,13 @@
           @click="$emit('cancel')"
           class="px-4 py-2 rounded bg-gray-700 hover:bg-gray-600 text-white"
         >
-          Cancel
+          cancelar
         </button>
         <button
           type="submit"
           class="px-4 py-2 rounded bg-sky-600 hover:bg-sky-400 text-white"
         >
-          Save
+          guardar
         </button>
       </div>
     </form>

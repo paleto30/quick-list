@@ -4,7 +4,7 @@
       @click="openForm = true"
       class="border border-blue-400 bg-gray-800 px-4 py-2 rounded hover:bg-blue-900 transition mt-5"
     >
-      + Add Student
+      + agregar estudiante
     </button>
 
     <ReusableTable
@@ -23,7 +23,7 @@
 
     <MyModal v-model:open="openForm" size="md" closable>
       <template #default>
-        <h3 class="text-lg font-semibold mb-4">Create Student</h3>
+        <h3 class="text-lg font-semibold mb-4">Crear estudiante</h3>
         <StudentForm @submit="handleCreate" @cancel="openForm = false" />
       </template>
     </MyModal>
@@ -67,8 +67,20 @@ const students = ref<Student[]>([
   },
 ]);
 
-function handleCreate(newStudent: Omit<Student, "id">) {
-  students.value.push({ id: String(Date.now()), ...newStudent });
+function handleCreate(
+  newStudent: Omit<
+    Student,
+    "id" | "createdAt" | "status" | "updatedAt" | "groupId"
+  >
+) {
+  students.value.push({
+    id: String(Date.now()),
+    groupId: "", // O un valor real por defecto si aplica
+    status: "active", // O un valor predeterminado
+    createdAt: new Date(),
+    updatedAt: new Date(),
+    ...newStudent,
+  });
   openForm.value = false;
 }
 </script>

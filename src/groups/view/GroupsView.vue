@@ -7,7 +7,7 @@
           @click="isAddGroupModalOpen = true"
           class="text-sm sm:text-base border border-blue-400 px-3 py-1 rounded-md text-blue-400 hover:bg-blue-900 transition whitespace-nowrap"
         >
-          add group +
+          crear grupo +
         </button>
       </div>
 
@@ -87,7 +87,7 @@
     <!-- Modal crear nuevo grupo -->
     <MyModal v-model:open="isAddGroupModalOpen" size="md" :closable="true">
       <div class="space-y-4">
-        <h3 class="text-xl font-semibold text-center">Create new group</h3>
+        <h3 class="text-xl font-semibold text-center">Crear grupo</h3>
         <CreateGroup
           @submit="handleCreateGroup"
           @cancel="() => (isAddGroupModalOpen = false)"

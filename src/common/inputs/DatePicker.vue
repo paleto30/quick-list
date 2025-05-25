@@ -1,7 +1,7 @@
 <template>
   <div class="max-w-md mx-auto mb-5">
     <label for="date" class="block input-label text-white">
-      Birthday <span v-if="required" class="text-sky-500">*</span>
+      Fecha nacimiento <span v-if="required" class="text-sky-500">*</span>
     </label>
 
     <div class="flex justify-center">

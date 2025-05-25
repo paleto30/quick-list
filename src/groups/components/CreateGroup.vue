@@ -4,19 +4,19 @@
       <input
         v-model="form.institutionName"
         type="text"
-        placeholder="Institution name"
+        placeholder="Institución "
         class="w-full px-4 py-2 rounded bg-gray-800 border border-gray-600 text-white"
       />
       <input
         v-model="form.subject"
         type="text"
-        placeholder="Subject"
+        placeholder="Materia"
         class="w-full px-4 py-2 rounded bg-gray-800 border border-gray-600 text-white"
       />
       <input
         v-model="form.referenceCode"
         type="text"
-        placeholder="Reference code"
+        placeholder="curso"
         class="w-full px-4 py-2 rounded bg-gray-800 border border-gray-600 text-white"
       />
 
@@ -26,13 +26,13 @@
           @click="$emit('cancel')"
           class="px-4 py-2 rounded bg-gray-700 hover:bg-gray-600"
         >
-          Cancel
+          cancelar
         </button>
         <button
           type="submit"
           class="px-4 py-2 rounded bg-sky-600 hover:bg-sky-400"
         >
-          Save
+          guardar
         </button>
       </div>
     </form>

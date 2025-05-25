@@ -5,13 +5,13 @@
     <!-- Contenido principal -->
     <div class="flex flex-col lg:flex-row lg:justify-between flex-1">
       <p class="mb-2 lg:mb-0 lg:flex-1 lg:text-center">
-        <strong>Institution:</strong> {{ institution }}
+        <strong>Institución:</strong> {{ institution }}
       </p>
       <p class="mb-2 lg:mb-0 lg:flex-1 lg:text-center">
-        <strong>Subject:</strong> {{ subject }}
+        <strong>Materia:</strong> {{ subject }}
       </p>
       <p class="lg:flex-1 lg:text-center">
-        <strong>Reference code:</strong> {{ code }}
+        <strong>Curso:</strong> {{ code }}
       </p>
     </div>
 
@@ -21,7 +21,7 @@
         @click="toggleArchive"
         class="text-xs text-gray-200 border border-blue-500 rounded px-2 py-1 hover:bg-sky-500 hover:text-white"
       >
-        {{ isArchived ? "Activate" : "Archive" }}
+        {{ isArchived ? "Activar" : "Archivar" }}
       </button>
       <button
         @click="openEditor = true"
