@@ -9,6 +9,7 @@
           'bg-gray-900 text-white rounded-2xl p-6 shadow-lg w-full',
           sizeClass,
           'relative',
+          'max-h-[90vh] overflow-y-auto',
         ]"
       >
         <button

@@ -50,7 +50,7 @@
     <!-- Modal con formulario de edición -->
     <MyModal v-model:open="openEditor" size="md" closable>
       <template #default>
-        <h3 class="text-lg font-semibold mb-4">Edit Group</h3>
+        <h3 class="text-lg font-semibold mb-4">Editar grupo</h3>
         <CreateGroup
           :institutionName="institution"
           :subject="subject"

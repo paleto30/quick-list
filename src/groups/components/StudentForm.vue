@@ -104,7 +104,7 @@
       <div class="flex justify-end gap-2">
         <button
           type="button"
-          @click="$emit('cancel')"
+          @click="handleCancel"
           class="px-4 py-2 rounded bg-gray-700 hover:bg-gray-600 text-white"
         >
           cancelar
@@ -161,6 +161,7 @@ const {
   captureImage,
   clearImage,
   handleFileUpload,
+  stopCamera,
 } = useImageCapture(toRef(form.value, "image"));
 
 const isFormValid = computed(() => {
@@ -184,5 +185,10 @@ function submitForm() {
   } else {
     showAlert("Porfavor complete los campos.");
   }
+}
+
+function handleCancel() {
+  stopCamera(); // <--- importante
+  emit("cancel");
 }
 </script>

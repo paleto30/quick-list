@@ -4,16 +4,25 @@
   >
     <!-- Contenedor del texto descriptivo -->
     <div
-      class="order-1 md:order-2 w-full max-w-2xl text-center md:text-left rounded-2xl p-8 mb-8 md:mb-0"
+      class="order-1 md:order-2 w-full max-w-2xl text-center rounded-2xl p-8 mb-8 md:mb-0"
     >
       <h2 class="text-3xl text-gray-200 mb-2 pb-6">Bienvenido a</h2>
-      <h1
-        class="text-5xl md:text-8xl text-blue-400 text-justify pl-8 p-0 lg:pb-4 font-bold mb-4"
-      >
-        QuickList
-      </h1>
+
+      <div class="flex flex-col items-center">
+        <h1
+          class="text-5xl md:text-8xl text-blue-400 font-bold mb-4 leading-tight text-center"
+        >
+          QuickList
+        </h1>
+        <img
+          src="../../../public/quickBlue.png"
+          alt="QuickList Logo"
+          class="w-24 md:w-32 lg:w-40 h-auto"
+        />
+      </div>
+
       <p
-        class="text-gray-200 text-md md:text-lg font-light text-center font-bold"
+        class="text-gray-200 text-md md:text-lg font-light text-center font-bold mt-6"
       >
         La herramienta que te permite llevar <br />
         tus listas de asistencia de forma <br />
@@ -31,13 +40,12 @@
 </template>
 
 <script setup lang="ts">
-import { useRouter } from "vue-router";
 import { useAlert } from "../../common/alerts/useMyAlert";
 import LoginForm from "../components/LoginForm.vue";
 import { useLogin } from "../composable/useLogin";
 
 const { showAlert } = useAlert();
-const router = useRouter();
+
 const { submitLogin } = useLogin(showAlert);
 
 const handleSubmit = async (payload: { email: string; password: string }) => {

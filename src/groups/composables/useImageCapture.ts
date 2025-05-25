@@ -10,7 +10,6 @@ export function useImageCapture(imageRef: { value: string }) {
       .getUserMedia({ video: true })
       .then((stream) => {
         const videoEl = video.value;
-        console.log("Video element:", videoEl);
         if (videoEl) {
           videoEl.srcObject = stream;
           videoEl.onloadedmetadata = () => {
@@ -77,5 +76,6 @@ export function useImageCapture(imageRef: { value: string }) {
     captureImage,
     clearImage,
     handleFileUpload,
+    stopCamera,
   };
 }
