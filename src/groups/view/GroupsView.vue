@@ -5,7 +5,7 @@
       <div class="flex justify-end mb-2">
         <button
           @click="isAddGroupModalOpen = true"
-          class="text-sm sm:text-base border border-blue-400 px-3 py-1 rounded-md text-blue-400 hover:bg-blue-900 transition whitespace-nowrap"
+          class="text-sm sm:text-base bg-blue-900 border border-blue-400 px-3 py-1 rounded-md text-gray-200 hover:bg-sky-600 transition whitespace-nowrap"
         >
           crear grupo +
         </button>
@@ -106,7 +106,7 @@ import GroupCard from "../components/GroupCard.vue";
 import { useGroups } from "../composables/useGroups";
 import type { INewGroupPayload, IGroup } from "../interfaces/groups.interfaces";
 import { useRouter } from "vue-router";
-import { useGroupStore } from "../groupStore";
+import { useGroupStore } from "../stores/groupStore";
 import { useAlert } from "../../common/alerts/useMyAlert";
 
 // router

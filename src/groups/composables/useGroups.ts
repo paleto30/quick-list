@@ -1,7 +1,7 @@
 import { ref } from "vue";
 import { apiFetch } from "../../api/api-client";
 import type { AlertType } from "../../common/alerts/useMyAlert";
-import { useGroupStore } from "../groupStore";
+import { useGroupStore } from "../stores/groupStore";
 import type { IGroup, INewGroupPayload } from "../interfaces/groups.interfaces";
 
 export const useGroups = (

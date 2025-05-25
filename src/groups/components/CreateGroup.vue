@@ -30,7 +30,7 @@
         </button>
         <button
           type="submit"
-          class="px-4 py-2 rounded bg-sky-600 hover:bg-sky-400"
+          class="px-4 py-2 rounded bg-blue-900 hover:bg-sky-600"
         >
           guardar
         </button>

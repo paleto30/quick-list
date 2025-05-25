@@ -1,6 +1,6 @@
 import { defineStore } from "pinia";
 import { computed, ref } from "vue";
-import type { IGroup, INewGroupPayload } from "./interfaces/groups.interfaces";
+import type { IGroup, INewGroupPayload } from "../interfaces/groups.interfaces";
 
 export const useGroupStore = defineStore(
   "group",

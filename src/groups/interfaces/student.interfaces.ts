@@ -1,14 +1,14 @@
-export interface Student {
-  id: string;
+export interface Person {
+  _id: string;
   groupId: string;
   dni: string;
+  birthday: Date; // o Date si deseas manejarlo como objeto Date
   name: string;
   lastName: string;
-  birthday: Date;
   email: string;
   phone: string;
+  status?: 'active' | 'inactive'; // puedes ajustar los posibles valores según tu lógica
   image: string;
-  status: string;
-  createdAt?: Date;
-  updatedAt?: Date;
+  createdAt?: Date; // o Date
+  updatedAt?: Date; // o Date
 }
