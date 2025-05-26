@@ -13,7 +13,7 @@
 
     <StudentsList :group-id="groupId" v-if="currentTab === 'students'" />
 
-    <AssistanceActions v-if="currentTab === 'assistance'" />
+    <AssistanceActions :groupId="groupId" v-if="currentTab === 'assistance'" />
 
     <ReusableTable v-if="currentTab === 'assistance'" :columns="['Name', 'Status']" :rows="[
       { Name: 'Alice', Status: 'Present' },
