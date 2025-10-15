@@ -53,7 +53,7 @@ const group = computed<IGroup | undefined>(() =>
 
 
 // Tabs
-const currentTab = ref(localStorage.getItem("currentTab") || "assistance");
+const currentTab = ref(localStorage.getItem("currentTab") || "students");
 const tabs = [
   { label: "Estudiantes", value: "students", icon: Users },
   { label: "Asistencia", value: "assistance", icon: ClipboardList },

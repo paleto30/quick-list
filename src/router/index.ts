@@ -42,6 +42,11 @@ const routes: RouteRecordRaw[] = [
     path: "/:pathMatch(.*)*",
     redirect: { name: "NotFound" },
   },
+  {
+    path: "/test",
+    name: "test",
+    component: ()=> import("../prueba/GroupsV2.vue")
+  }
 ];
 
 const router = createRouter({
@@ -49,21 +54,21 @@ const router = createRouter({
   routes,
 });
 
-router.beforeEach((to, from, next) => {
-  const authStore = useAuthStore();
-  const userStore = useUserStore();
+// router.beforeEach((to, _from, next) => {
+//   const authStore = useAuthStore();
+//   const userStore = useUserStore();
 
-  const isAuthenticated = !!authStore.accessToken && !!userStore.user;
+//   const isAuthenticated = !!authStore.accessToken && !!userStore.user;
 
-  const publicRoutes = ["/sign-in", "/sign-up", "/not-found"];
+//   const publicRoutes = ["/sign-in", "/sign-up", "/not-found"];
 
-  if (!isAuthenticated && !publicRoutes.includes(to.path)) {
-    // No autenticado y tratando de acceder a ruta privada
-    next("/sign-in");
-  } else {
-    // Acceso permitido
-    next();
-  }
-});
+//   if (!isAuthenticated && !publicRoutes.includes(to.path)) {
+//     // No autenticado y tratando de acceder a ruta privada
+//     next("/sign-in");
+//   } else {
+//     // Acceso permitido
+//     next();
+//   }
+// });
 
 export default router;

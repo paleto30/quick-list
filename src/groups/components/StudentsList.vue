@@ -1,26 +1,46 @@
 <template>
   <div>
     <!-- Botón para agregar estudiante -->
-    <button @click="openForm = true"
-      class="border border-blue-400 bg-gray-800 px-4 py-2 rounded hover:bg-blue-900 transition mt-5">
+    <button
+      @click="openForm = true"
+      class="border border-blue-400 bg-gray-800 px-4 py-2 rounded hover:bg-blue-900 transition mt-5"
+    >
       + agregar estudiante
     </button>
 
     <!-- Tabla de estudiantes -->
-    <ReusableTable :columns="['DNI', 'Nombre', 'Apellidos', 'Edad', 'Email', 'Celular', 'Estado']" :rows="students.map((s) => ({
-      _id: s._id,
-      DNI: s.dni,
-      Nombre: s.name,
-      Apellidos: s.lastName,
-      Edad: calculateAge(s.birthday),
-      Email: s.email,
-      Celular: s.phone,
-      Estado: s.status,
-    }))" @selection-change="handleSelection" @edit-student="openEditModal" />
+    <ReusableTable
+      :columns="[
+        'DNI',
+        'Nombre',
+        'Apellidos',
+        'Edad',
+        'Email',
+        'Celular',
+        'Estado',
+      ]"
+      :rows="
+        students.map((s) => ({
+          _id: s._id,
+          DNI: s.dni,
+          Nombre: s.name,
+          Apellidos: s.lastName,
+          Edad: calculateAge(s.birthday),
+          Email: s.email,
+          Celular: s.phone,
+          Estado: s.status,
+        }))
+      "
+      @selection-change="handleSelection"
+      @edit-student="openEditModal"
+    />
 
     <!-- Botón para eliminar seleccionados -->
-    <button class="mt-4 px-4 py-2 border border-red-600 hover:bg-red-700 text-white rounded"
-      :disabled="selectedStudentIds.length === 0" @click="deleteSelected">
+    <button
+      class="mt-4 px-4 py-2 border border-red-600 hover:bg-red-700 text-white rounded"
+      :disabled="selectedStudentIds.length === 0"
+      @click="deleteSelected"
+    >
       Eliminar seleccionados ({{ selectedStudentIds.length }})
     </button>
 
@@ -28,9 +48,13 @@
     <MyModal v-model:open="openForm" size="md" closable>
       <template #default>
         <h3 class="text-lg font-semibold mb-4">
-          {{ editingStudent ? 'Editar estudiante' : 'Crear estudiante' }}
+          {{ editingStudent ? "Editar estudiante" : "Crear estudiante" }}
         </h3>
-        <StudentForm :initial-values="editingStudent" @submit="handleSubmit" @cancel="closeModal" />
+        <StudentForm
+          :initial-values="editingStudent"
+          @submit="handleSubmit"
+          @cancel="closeModal"
+        />
       </template>
     </MyModal>
   </div>
@@ -55,7 +79,8 @@ const selectedStudentIds = ref<string[]>([]);
 
 const studentsStore = useStudentStore();
 const students = computed(() => studentsStore.computedStudents);
-const { createStudent, loadStudentsFromDB } = useStudent(showAlert);
+const { createStudent, loadStudentsFromDB, deleteManyStudents, updateStudent } =
+  useStudent(showAlert);
 
 // Cargar datos al montar
 onMounted(async () => {
@@ -80,7 +105,8 @@ function closeModal() {
 // Crear o actualizar estudiante
 async function handleSubmit(payload: FormData) {
   if (editingStudent.value) {
-    //await updateStudent(editingStudent.value._id, payload);
+    // 🟢 Asegúrate de enviar el FormData y no solo el ID
+    await updateStudent(props.groupId, editingStudent.value._id, payload);
   } else {
     await createStudent(props.groupId, payload);
   }
@@ -91,13 +117,14 @@ async function handleSubmit(payload: FormData) {
 // Obtener los seleccionados
 function handleSelection(ids: string[]) {
   selectedStudentIds.value = ids;
-  console.log(ids);
 }
 
 // Eliminar seleccionados
 async function deleteSelected() {
+  if (selectedStudentIds.value.length === 0) return;
+
   if (confirm("¿Estás seguro de eliminar los estudiantes seleccionados?")) {
-    //await deleteStudents(selectedStudentIds.value);
+    await deleteManyStudents(props.groupId, selectedStudentIds.value);
     selectedStudentIds.value = [];
   }
 }

@@ -16,6 +16,8 @@ export const useAuthStore = defineStore("auth", () => {
 
   const isAuthenticated = computed(() => !!accessToken.value);
 
+  
+  
   return {
     /* properties */
     accessToken,

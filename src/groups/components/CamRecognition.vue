@@ -15,21 +15,35 @@
 <script setup lang="ts">
 import { ref, onMounted, onUnmounted } from "vue";
 
-const props = defineProps({
-  groupId: { type: String, required: true },
-});
-const emit = defineEmits(["close", "result"]);
+const props = defineProps<{
+  groupId: string;
+}>();
 
+const emit = defineEmits<{
+  (e: "close"): void;
+  (
+    e: "result",
+    payload: {
+      groupId: string;
+      assistance: { studentId: string; present: boolean }[];
+    }
+  ): void;
+}>();
+
+// Estado
 const recognizedData = ref<{ studentId: string; present: boolean }[]>([]);
-const video = ref(null);
+const video = ref<HTMLVideoElement | null>(null);
 const loading = ref(false);
-let stream: any = null;
-let intervalId: any = null;
+let stream: MediaStream | null = null;
+let intervalId: number | null = null;
 
+// Funciones cámara
 const startCamera = async () => {
   try {
     stream = await navigator.mediaDevices.getUserMedia({ video: true });
-    video.value.srcObject = stream;
+    if (video.value) {
+      video.value.srcObject = stream;
+    }
   } catch (err) {
     console.error("No se pudo acceder a la cámara", err);
   }
@@ -37,53 +51,66 @@ const startCamera = async () => {
 
 const stopCamera = () => {
   if (stream) {
-    stream.getTracks().forEach((track) => track.stop());
+    stream.getTracks().forEach((track: MediaStreamTrack) => track.stop());
     stream = null;
   }
 };
 
-const captureFrame = () => {
+// Captura un frame del video
+const captureFrame = (): string | null => {
+  if (!video.value) return null;
+
   const canvas = document.createElement("canvas");
   canvas.width = video.value.videoWidth;
   canvas.height = video.value.videoHeight;
   const ctx = canvas.getContext("2d");
+  if (!ctx) return null;
+
   ctx.drawImage(video.value, 0, 0, canvas.width, canvas.height);
   return canvas.toDataURL("image/jpeg");
 };
 
+// Inicia reconocimiento facial
 const startRecognition = () => {
   loading.value = true;
 
-  intervalId = setInterval(async () => {
+  intervalId = window.setInterval(async () => {
     const image = captureFrame();
+    if (!image) return;
 
-    const response = await fetch("http://localhost:8000/recognize", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ group_id: props.groupId, image }),
-    });
+    try {
+      const response = await fetch("http://localhost:8000/recognize", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ group_id: props.groupId, image }),
+      });
 
-    if (response.ok) {
-      const data = await response.json();
-
-      // data.assistance = [{ studentId, present }]
-      for (const entry of data.assistance) {
-        const alreadyAdded = recognizedData.value.some(
-          (e) => e.studentId === entry.studentId
-        );
-
-        if (!alreadyAdded) {
-          recognizedData.value.push(entry);
+      if (response.ok) {
+        const data = await response.json();
+        // data.assistance = [{ studentId, present }]
+        for (const entry of data.assistance as {
+          studentId: string;
+          present: boolean;
+        }[]) {
+          const alreadyAdded = recognizedData.value.some(
+            (e) => e.studentId === entry.studentId
+          );
+          if (!alreadyAdded) {
+            recognizedData.value.push(entry);
+          }
         }
+      } else {
+        console.error("Error al reconocer rostro");
       }
-    } else {
-      console.error("Error al reconocer rostro");
+    } catch (err) {
+      console.error("Error de red en reconocimiento", err);
     }
   }, 1000);
 };
 
+// Detiene el reconocimiento
 const stopRecognition = () => {
   loading.value = false;
   if (intervalId) {
@@ -101,9 +128,7 @@ const stopRecognition = () => {
 };
 
 onMounted(startCamera);
-onUnmounted(() => {
-  stopRecognition();
-});
+onUnmounted(stopRecognition);
 </script>
 
 <style scoped>
