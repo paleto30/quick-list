@@ -1,7 +1,7 @@
 <template>
   <AppContainer>
     <!-- Encabezado de grupos con botón “add group +” -->
-    <section class="mb-4">
+    <section class="mb-4 section-h">
       <div class="flex justify-end mb-2">
         <button
           @click="isAddGroupModalOpen = true"
@@ -155,5 +155,10 @@ const clickInGroup = (group: IGroup) => {
 .fade-leave-to {
   opacity: 0;
   transform: translateY(-5px);
+}
+
+.section-h {
+  height: 400px;
+  max-height: 500px;
 }
 </style>

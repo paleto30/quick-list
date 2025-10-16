@@ -1,53 +1,49 @@
 <template>
-  <div class="min-h-screen bg-[#12151c] text-white flex relative">
-    <!-- 🧭 Sidebar fija -->
-    <Sidebar
-      v-model:isSidebarOpen="isSidebarOpen"
-      v-model:isMobile="isMobile"
-      v-model:isMobileMenuOpen="isMobileMenuOpen"
-    />
+  <div class="min-h-screen flex flex-col bg-[#12151c] text-white">
+    <!-- 🧭 Sidebar (solo desktop) -->
+    <Sidebar v-if="!isMobile" v-model:isSidebarOpen="isSidebarOpen" />
 
-    <!-- 🧩 Contenedor principal -->
+    <!-- 🧩 Contenido principal -->
     <main
-      class="flex-1 transition-all duration-300 px-4 sm:px-8 py-6 overflow-y-auto"
-      :style="mainStyle"
+      class="flex-1 transition-all duration-300 overflow-y-auto"
+      :class="isMobile ? 'pb-16' : isSidebarOpen ? 'ml-64' : 'ml-20'"
     >
-      <slot />
+      <div class="min-h-screen px-4 sm:px-8 py-6">
+        <!-- 🧭 Breadcrumb -->
+        <NavBreadcrumb class="mb-6" />
+
+        <!-- 🔁 Aquí se inyectarán las vistas de tus rutas hijas -->
+        <router-view />
+      </div>
     </main>
+
+    <!-- 📱 BottomNav (solo mobile) -->
+    <BottomNav v-if="isMobile" />
   </div>
 </template>
 
 <script setup lang="ts">
-import { ref, computed, onMounted } from "vue";
+import { ref, onMounted, onBeforeUnmount } from "vue";
 import Sidebar from "../../prueba/Sidebar.vue";
+import BottomNav from "../../prueba/BottomNav.vue";
+import NavBreadcrumb from "../navbar/NavBreadcrumb.vue";
 
-// 🧠 Estado compartido
+/* --- Estado --- */
 const isSidebarOpen = ref(true);
 const isMobile = ref(false);
-const isMobileMenuOpen = ref(false);
 
-// 🖥️ Detectar tamaño de pantalla
+/* --- Detección de pantalla --- */
 const handleResize = () => {
   isMobile.value = window.innerWidth < 768;
+  if (isMobile.value) isSidebarOpen.value = false;
 };
+
 onMounted(() => {
   handleResize();
   window.addEventListener("resize", handleResize);
 });
 
-// 📏 Ajuste del espacio dinámico
-const mainStyle = computed(() => {
-  // 📱 En mobile: sidebar flota sobre el contenido
-  if (isMobile.value) {
-    return {
-      marginLeft: "0",
-      filter: isMobileMenuOpen.value ? "blur(2px)" : "none",
-    };
-  }
-
-  // 💻 En desktop: sidebar empuja el contenido
-  return {
-    marginLeft: isSidebarOpen.value ? "16rem" /* 64 */ : "5rem" /* 20 */,
-  };
+onBeforeUnmount(() => {
+  window.removeEventListener("resize", handleResize);
 });
 </script>

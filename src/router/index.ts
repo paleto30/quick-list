@@ -9,10 +9,6 @@ import { useUserStore } from "../common/stores/userStore";
 const routes: RouteRecordRaw[] = [
   // register routes here
   {
-    path: "/",
-    redirect: "/sign-in",
-  },
-  {
     path: "/sign-in",
     name: "login",
     component: () => import("../sign-in/view/LoginView.vue"),
@@ -23,16 +19,26 @@ const routes: RouteRecordRaw[] = [
     component: () => import("../sign-up/view/RegisterView.vue"),
   },
   {
-    path: "/groups",
-    name: "Groups",
-    component: () => import("../groups/view/GroupsView.vue"),
+    path: "/",
+    name: "App",
+    component: () => import("../common/layouts/AppContainer.vue"),
+    children: [
+      {
+        path: "",
+        redirect: { name: "dashboard" },
+      },
+      {
+        path: "dashboard",
+        name: "dashboard",
+        component: () => import("../prueba/Dashboard.vue"),
+      },
+      {
+        path: "groups",
+        name: "groups",
+        component: () => import("../prueba/Groups.vue"),
+      },
+    ],
   },
-  {
-    path: "/groups/:id",
-    name: "GroupDetail",
-    component: () => import("../groups/view/IndividualGroup.vue"),
-  },
-
   {
     path: "/not-found",
     name: "NotFound",
@@ -42,11 +48,6 @@ const routes: RouteRecordRaw[] = [
     path: "/:pathMatch(.*)*",
     redirect: { name: "NotFound" },
   },
-  {
-    path: "/test",
-    name: "test",
-    component: ()=> import("../prueba/GroupsV2.vue")
-  }
 ];
 
 const router = createRouter({
