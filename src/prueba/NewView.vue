@@ -35,8 +35,9 @@ function handleClick() {
 import { onMounted } from 'vue'
 
 onMounted(() => {
-  console.log('✅ Componente montado')
+  console.log('✅ Componente montado desde la rama feature/conflicto')
 })
+
 </script>
 
 <style scoped>
