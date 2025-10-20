@@ -11,7 +11,7 @@ interface Props {
   modelValue?: string | number | boolean
 }
 
-const props = defineProps<Props>()
+const otracosa = ref('')
 
 // ✅ Emits
 const emit = defineEmits<{
@@ -35,8 +35,9 @@ function handleClick() {
 import { onMounted } from 'vue'
 
 onMounted(() => {
-  console.log('🚀 Componente inicializado en main')
+  console.log('✅ Componente montado desde la rama feature/conflicto')
 })
+
 </script>
 
 <style scoped>
