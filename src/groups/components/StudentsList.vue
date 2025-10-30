@@ -11,6 +11,7 @@
     <!-- Tabla de estudiantes -->
     <ReusableTable
       :columns="[
+        'Foto',
         'DNI',
         'Nombre',
         'Apellidos',
@@ -22,10 +23,11 @@
       :rows="
         students.map((s) => ({
           _id: s._id,
+          Foto: `../../../public/vite.svg`,
           DNI: s.dni,
           Nombre: s.name,
           Apellidos: s.lastName,
-          Edad: calculateAge(s.birthday),
+          Edad: calculateAge(s.birthday!),
           Email: s.email,
           Celular: s.phone,
           Estado: s.status,

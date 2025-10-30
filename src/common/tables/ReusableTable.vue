@@ -17,13 +17,15 @@
       </thead>
       <tbody>
         <tr v-for="(row, i) in rows" :key="row._id || i" class="hover:bg-gray-800 border-t border-gray-700 transition">
-          <td class="px-4 py-2">
+
+          <td class="px-4 py-3">
             <input type="checkbox" :value="row._id" v-model="selectedIds" @change="emitSelection" />
           </td>
-          <td v-for="(col, j) in columns" :key="j" class="px-4 py-2 text-gray-200">
-            {{ row[col] }}
+          <td v-for="(col, j) in columns" :key="j" class="px-4 py-3 text-gray-200">
+            <img v-if="col === 'Foto'" src="/vite.svg" alt="foto" class="w-8 rounded-full" />
+            <span v-else>{{ row[col] }}</span>
           </td>
-          <td class="px-4 py-2">
+          <td class="px-4 py-3">
 
             <button class="text-blue-400 hover:text-blue-600" @click="emitEdit(row._id)" title="Editar">
               ✏️
