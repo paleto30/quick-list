@@ -25,7 +25,7 @@
           DNI: s.dni,
           Nombre: s.name,
           Apellidos: s.lastName,
-          Edad: calculateAge(s.birthday),
+          Edad: s.birthday ? calculateAge(s.birthday) : '-',
           Email: s.email,
           Celular: s.phone,
           Estado: s.status,

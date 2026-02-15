@@ -1,52 +1,33 @@
 <template>
   <div>
-    <!-- 🔘 Botón toggle (solo mobile) -->
-    <button
-      class="fixed top-4 left-4 z-50 bg-gray-800 text-white p-2 rounded-lg shadow-lg md:hidden"
-      @click="toggleSidebar"
-    >
-      <svg
-        xmlns="http://www.w3.org/2000/svg"
-        class="w-6 h-6"
-        fill="none"
-        stroke="currentColor"
-        stroke-width="2"
-        viewBox="0 0 24 24"
-      >
-        <path
-          stroke-linecap="round"
-          stroke-linejoin="round"
-          d="M4 6h16M4 12h16M4 18h16"
-        />
-      </svg>
-    </button>
-
     <!-- 🧭 Sidebar -->
     <aside
       :class="[
-        'fixed top-0 left-0 h-full flex flex-col justify-between bg-[#1a1d26] text-gray-100 shadow-xl z-50 transition-all duration-300 ease-in-out',
+        'fixed top-0 left-0 h-full flex flex-col bg-[#1a1d26] text-gray-100 shadow-xl transition-all duration-300 ease-in-out',
+
+        // MOBILE → overlay con transform, sin header ni footer de usuario
         isMobile
-          ? isMobileMenuOpen
-            ? 'w-64'
-            : 'w-0 overflow-hidden'
-          : computedOpen
-          ? 'w-64'
-          : 'w-16',
+          ? [
+              'w-64 z-40',
+              isMobileMenuOpen ? 'translate-x-0' : '-translate-x-full',
+            ]
+          : // DESKTOP → layout sin transform, con header y footer
+            ['z-40 justify-between', isSidebarOpen ? 'w-64' : 'w-16'],
       ]"
     >
-      <!-- 🔝 Header -->
+      <!-- 🔝 Header - SOLO EN DESKTOP -->
       <div
+        v-if="!isMobile"
         class="relative flex items-center gap-3 p-3 border-b border-gray-800"
       >
-        <img src="../../public/quickBlue.png" alt="Logo" class="w-10 h-10" />
+        <img src="/quickBlue.png" alt="Logo" class="w-10 h-10" />
         <h1 v-if="computedOpen" class="text-xl font-semibold whitespace-nowrap">
-          MyApp
+          {{ headerName }}
         </h1>
 
         <!-- 📌 Botón para colapsar (solo desktop) -->
         <button
-          v-if="!isMobile"
-          class="absolute -right-3 top-6/6 transform -translate-y-1/2 bg-gray-800 hover:bg-gray-700 text-gray-100 p-2 rounded-full shadow-md border border-gray-700 transition-all hover:scale-105 active:scale-95 z-30"
+          class="absolute -right-3 top-1/1 transform -translate-y-1/2 bg-gray-800 hover:bg-gray-700 text-gray-100 p-2 rounded-full shadow-md border border-gray-700 transition-all hover:scale-105 active:scale-95 z-30"
           @click="toggleSidebar"
           aria-label="Toggle sidebar"
           type="button"
@@ -87,14 +68,15 @@
 
       <!-- 📋 Menú principal -->
       <nav
-        class="flex-1 justify-center p-2 py-5 space-y-2 overflow-y-auto overflow-hidden"
+        class="flex-1 p-2 py-5 space-y-2 overflow-y-auto overflow-hidden"
+        :class="{ 'justify-center': !isMobile }"
       >
         <RouterLink
           v-for="item in menuItems"
           :key="item.label"
           :to="item.path"
           class="flex items-center gap-3 p-2 rounded-lg hover:bg-gray-800 transition-colors"
-          active-class="bg-gray-800"
+          active-class="bg-blue-600 hover:bg-blue-700"
           @click="handleMenuClick"
         >
           <div
@@ -111,15 +93,15 @@
         </RouterLink>
       </nav>
 
-      <!-- 👤 Usuario -->
-      <div class="relative p-2 border-t border-gray-800">
+      <!-- 👤 Usuario - SOLO EN DESKTOP -->
+      <div v-if="!isMobile" class="relative p-2 border-t border-gray-800">
         <div
           class="flex items-center gap-3 p-2 rounded-lg hover:bg-gray-800 cursor-pointer"
           @click="toggleUserMenu"
           data-user-toggle
         >
           <img
-            :src="user.avatar"
+            :src="avatar"
             alt="User"
             class="w-8 h-8 rounded-full object-cover"
           />
@@ -127,7 +109,8 @@
             v-show="computedOpen"
             class="font-medium truncate transition-all duration-300 ease-in-out"
           >
-            {{ user.name }}
+            <p class="text-sm font-semibold text-white">{{ name }}</p>
+            <p class="text-xs text-gray-400">{{ email }}</p>
           </span>
           <svg
             v-if="computedOpen"
@@ -146,53 +129,73 @@
             />
           </svg>
         </div>
+
+        <!-- 📂 Dropdown flotante - SOLO EN DESKTOP -->
+        <transition name="fade">
+          <div
+            v-if="isUserMenuOpen"
+            ref="userMenuRef"
+            :class="[
+              'absolute bottom-full mb-2 bg-gray-800 rounded-lg shadow-lg border border-gray-700 overflow-hidden transition-all duration-300',
+              computedOpen ? 'left-2 w-60' : 'left-2 w-48',
+            ]"
+            style="z-index: 60"
+          >
+            <!-- 👤 Perfil -->
+            <a
+              href="#"
+              class="flex items-center gap-3 px-4 py-2 hover:bg-gray-700 transition-colors"
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                class="w-5 h-5"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+                stroke-width="2"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"
+                />
+              </svg>
+              <span>Profile</span>
+            </a>
+
+            <!-- 🧭 Separador -->
+            <div class="border-t border-gray-700 my-1"></div>
+
+            <!-- 🚪 Cerrar sesión -->
+            <a
+              href="#"
+              class="flex items-center gap-3 px-4 py-2 hover:bg-gray-700 text-red-400 transition-colors"
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                class="w-5 h-5"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+                stroke-width="2"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"
+                />
+              </svg>
+              <span>Logout</span>
+            </a>
+          </div>
+        </transition>
       </div>
     </aside>
-
-    <!-- 📂 Dropdown flotante -->
-    <transition name="fade">
-      <div
-        v-if="isUserMenuOpen"
-        ref="userMenuRef"
-        :class="[
-          'absolute bottom-18  bg-gray-800 rounded-lg shadow-lg border border-gray-700 overflow-hidden transition-all duration-300',
-          computedOpen ? 'left-2 w-60' : 'left-18 w-48',
-        ]"
-        style="z-index: 60"
-      >
-        <!-- 👤 Perfil -->
-        <a
-          href="#"
-          class="flex items-center gap-3 px-4 py-2 hover:bg-gray-700 transition-colors"
-        >
-          👤 <span>Profile</span>
-        </a>
-
-        <!-- ⚙️ Configuración -->
-        <a
-          href="#"
-          class="flex items-center gap-3 px-4 py-2 hover:bg-gray-700 transition-colors"
-        >
-          ⚙️ <span>Settings</span>
-        </a>
-
-        <!-- 🧭 Separador -->
-        <div class="border-t border-gray-700 my-1"></div>
-
-        <!-- 🚪 Cerrar sesión -->
-        <a
-          href="#"
-          class="flex items-center gap-3 px-4 py-2 hover:bg-gray-700 text-red-400 transition-colors"
-        >
-          🚪 <span>Logout</span>
-        </a>
-      </div>
-    </transition>
 
     <!-- 🧩 Overlay (mobile) -->
     <div
       v-if="isMobile && isMobileMenuOpen"
-      class="fixed inset-0 bg-black/40 z-40"
+      class="fixed inset-0 bg-black/40 z-30"
       @click="toggleSidebar"
     ></div>
   </div>
@@ -200,11 +203,18 @@
 
 <script setup lang="ts">
 import { ref, computed, onMounted, onBeforeUnmount, watch } from "vue";
+import { usePermissionStore } from "../common/stores/permissionsStore";
+
+const permissionStore = usePermissionStore();
 
 const props = defineProps({
+  headerName: { type: String, required: true },
   isSidebarOpen: { type: Boolean, default: true },
   isMobile: { type: Boolean, default: false },
   isMobileMenuOpen: { type: Boolean, default: false },
+  name: { type: String, required: true, default: "username" },
+  email: { type: String, required: true, default: "e-mail" },
+  avatar: { type: String, required: false },
 });
 
 const emit = defineEmits([
@@ -225,22 +235,35 @@ watch(isSidebarOpen, (val) => emit("update:isSidebarOpen", val));
 watch(isMobile, (val) => emit("update:isMobile", val));
 watch(isMobileMenuOpen, (val) => emit("update:isMobileMenuOpen", val));
 
-const user = ref({
-  name: "Andrés Galvis",
-  avatar:
-    "https://ui-avatars.com/api/?name=Andres+Galvis&background=2563eb&color=fff",
-});
-
-const menuItems = [
-  { label: "Dashboard", path: "/dashboard" },
-  { label: "Groups", path: "/groups" },
-  // { label: "Users", path: "/app/users" }, // si la agregas después
-  // { label: "Reports", path: "/app/reports" }, // igual aquí
+const allMenuItems = [
+  {
+    label: "Groups",
+    path: "/groups",
+    resource: "groups",
+    action: "read",
+  },
+  {
+    label: "Users",
+    path: "/users",
+    resource: "users",
+    action: "read",
+  },
 ];
 
+const menuItems = computed(() => {
+  return allMenuItems.filter((item) =>
+    permissionStore.can(item.resource, item.action),
+  );
+});
+
 const handleResize = () => {
-  isMobile.value = window.innerWidth < 768;
-  if (isMobile.value) isSidebarOpen.value = false;
+  const mobile = window.innerWidth < 768;
+  isMobile.value = mobile;
+
+  if (!mobile) {
+    // Al pasar a desktop
+    isMobileMenuOpen.value = false;
+  }
 };
 
 onMounted(() => {
@@ -254,7 +277,9 @@ onBeforeUnmount(() => {
   document.removeEventListener("mousedown", handleClickOutside);
 });
 
-const computedOpen = computed(() => isSidebarOpen.value || isMobile.value);
+const computedOpen = computed(() => {
+  return isMobile.value ? isMobileMenuOpen.value : isSidebarOpen.value;
+});
 
 const toggleSidebar = () => {
   if (isMobile.value) {
@@ -267,7 +292,9 @@ const toggleSidebar = () => {
 const toggleUserMenu = () => (isUserMenuOpen.value = !isUserMenuOpen.value);
 
 const handleMenuClick = () => {
-  if (!isMobile.value && !isSidebarOpen.value) isSidebarOpen.value = true;
+  if (isMobile.value) {
+    isMobileMenuOpen.value = false;
+  }
 };
 
 // 🧠 Detectar clics fuera del menú
@@ -303,7 +330,9 @@ function handleClickOutside(event: MouseEvent) {
 [v-show] {
   opacity: 1;
   transform: translateX(0);
-  transition: opacity 0.3s ease, transform 0.3s ease;
+  transition:
+    opacity 0.3s ease,
+    transform 0.3s ease;
 }
 
 [v-show="false"] {
@@ -314,5 +343,23 @@ function handleClickOutside(event: MouseEvent) {
 .router-link-active {
   background-color: #2563eb; /* azul */
   color: white;
+}
+
+/* Scroll personalizado */
+nav::-webkit-scrollbar {
+  width: 6px;
+}
+
+nav::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+nav::-webkit-scrollbar-thumb {
+  background: #374151;
+  border-radius: 3px;
+}
+
+nav::-webkit-scrollbar-thumb:hover {
+  background: #4b5563;
 }
 </style>

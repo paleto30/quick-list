@@ -21,8 +21,9 @@
 
 <script setup lang="ts">
 import { computed, ref, watch } from "vue";
-import ButtonForm from "../../common/inputs/ButtonForm.vue";
-import InputForm from "../../common/inputs/InputForm.vue";
+
+import ButtonForm from "../../common/components/inputs/ButtonForm.vue";
+import InputForm from "../../common/components/inputs/InputForm.vue";
 import type { ISignUpVerification } from "../interfaces/register.interface";
 
 const isDisabled = ref(true);
@@ -47,7 +48,7 @@ watch(
   () => {
     isDisabled.value = !validateCode();
   },
-  { deep: true }
+  { deep: true },
 );
 
 const handleSubmit = () => {

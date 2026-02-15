@@ -1,38 +1,58 @@
-import { useRouter } from "vue-router";
 import { useAuthStore } from "../common/stores/authStore";
 import { config } from "../config";
 
-const authStore = useAuthStore();
-const router = useRouter();
+let refreshPromise: Promise<boolean> | null = null;
 
 export const tryRefreshToken = async (): Promise<boolean> => {
-  try {
-    const res = await fetch(`${config.apiBaseUrl}/auth/refresh-tokens`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      credentials: "include",
-    });
-
-    if (!res.ok) return false;
-
-    const json = await res.json().catch(() => null);
-
-    if (!json || !json.data?.accessToken) return false;
-
-    authStore.setAccessToken(json.data.accessToken);
-    return true;
-  } catch (err) {
-    console.error("Error al refrescar token:", err);
-    return false;
+  // Si ya hay un refresh en progreso, esperar ese resultado
+  if (refreshPromise) {
+    console.log("⏳ Ya hay un refresh en progreso, esperando...");
+    return refreshPromise;
   }
+
+  const authStore = useAuthStore();
+  refreshPromise = (async () => {
+    try {
+      console.log("🔄 Iniciando refresh de token...");
+      const res = await fetch(`${config.apiBaseUrl}/api/v1/auth/refresh-tokens`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        credentials: "include",
+      });
+
+      if (!res.ok) {
+        console.error("❌ Refresh falló con status:", res.status);
+        return false;
+      }
+
+      const json = await res.json().catch(() => null);
+
+      if (!json || !json.data?.accessToken) {
+        console.error("❌ Respuesta inválida del refresh");
+        return false;
+      }
+
+      authStore.setAccessToken(json.data.accessToken);
+      console.log("✅ Token refrescado exitosamente");
+      return true;
+    } catch (err) {
+      console.error("❌ Error al refrescar token:", err);
+      return false;
+    } finally {
+      // 🆕 Limpiar la promesa después de completar
+      refreshPromise = null;
+    }
+  })();
+  return refreshPromise;
 };
 
 export const apiFetch = async (
   url: string,
   options: RequestInit = {},
   auth: boolean = true,
-  retry: boolean = true
+  retry: boolean = true,
 ): Promise<any> => {
+  const authStore = useAuthStore();
   const rawHeaders = normalizeHeaders(options.headers);
   const headers: Record<string, string> = {
     ...rawHeaders,
@@ -51,7 +71,7 @@ export const apiFetch = async (
   }
 
   try {
-    const res = await fetch(`${config.apiBaseUrl}${url}`, {
+    const res = await fetch(`${config.apiBaseUrl}/api/v1${url}`, {
       ...options,
       credentials: "include",
       headers,
@@ -63,10 +83,11 @@ export const apiFetch = async (
     if (res.status === 401 && retry) {
       const refreshed = await tryRefreshToken();
       if (refreshed) {
+        await new Promise((resolve) => setTimeout(resolve, 100));
         return apiFetch(url, options, true, false);
       } else {
         authStore.clearAccesstoken();
-        router.push({ name: "login" });
+
         return {
           success: false,
           statusCode: 401,
@@ -79,7 +100,7 @@ export const apiFetch = async (
     return json;
   } catch (error) {
     console.error("Error de red o conexión:", error);
-    router.push({ name: "login" });
+
     return {
       success: false,
       statusCode: 0,
@@ -89,7 +110,7 @@ export const apiFetch = async (
 };
 
 function normalizeHeaders(
-  headers: HeadersInit | undefined
+  headers: HeadersInit | undefined,
 ): Record<string, string> {
   if (!headers) return {};
 

@@ -15,7 +15,7 @@ export default defineConfig({
         skipWaiting: true,
       },
       devOptions: {
-        enabled: true,
+        enabled: false,
       },
       manifest: {
         name: "PWA-test",
@@ -40,6 +40,7 @@ export default defineConfig({
       },
     }),
   ],
+  
   server: {
     allowedHosts: [".ngrok-free.app"],
   },

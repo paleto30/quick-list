@@ -1,16 +1,17 @@
 import { useRouter } from "vue-router";
 import { apiFetch } from "../../api/api-client";
+import type { AlertType } from "../../common/alerts/useMyAlert";
 import { useAuthStore } from "../../common/stores/authStore";
 import { useUserStore } from "../../common/stores/userStore";
-import type { AlertType } from "../../common/alerts/useMyAlert";
 
 export const useLogin = (
-  handleAlert: (title: string, msg?: string, type?: AlertType) => void
+  handleAlert: (title: string, msg?: string, type?: AlertType) => void,
 ) => {
   //----------- properties -----------//
 
   const authStore = useAuthStore();
   const userStore = useUserStore();
+
   const router = useRouter();
 
   //----------- methods -----------//
@@ -49,7 +50,7 @@ export const useLogin = (
 
       await new Promise((resolve) => setTimeout(resolve, 700));
 
-      router.push({ name: "Groups" });
+      router.push({ name: "groups" });
     } catch (error) {
       console.error("Error al hacer login:", error);
       handleAlert("Error inesperado, por favor intenta de nuevo. ❌");

@@ -22,7 +22,7 @@
 </template>
 
 <script setup lang="ts">
-import { defineEmits, defineProps, ref, computed, onMounted } from "vue";
+import { ref, computed, onMounted } from "vue";
 
 const props = defineProps<{
   visible: boolean; // Visibilidad controlada desde afuera

@@ -43,8 +43,8 @@
 
 <script setup lang="ts">
 import { computed, ref, watch } from "vue";
-import InputForm from "../../common/inputs/InputForm.vue";
-import ButtonForm from "../../common/inputs/ButtonForm.vue";
+import InputForm from "../../common/components/inputs/InputForm.vue";
+import ButtonForm from "../../common/components/inputs/ButtonForm.vue";
 
 const isSubmitDisabled = ref(true);
 
@@ -70,7 +70,7 @@ watch(
   () => {
     isSubmitDisabled.value = !validateForm(); // Desactivar el botón si la validación falla
   },
-  { deep: true }
+  { deep: true },
 );
 
 const handleSubmit = () => {

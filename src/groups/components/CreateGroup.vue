@@ -43,7 +43,7 @@
 import { computed, ref } from "vue";
 import type { INewGroupPayload } from "../interfaces/groups.interfaces";
 import { useAlert } from "../../common/alerts/useMyAlert";
-// Ajusta ruta si hace falta
+
 
 // Props
 const props = defineProps({

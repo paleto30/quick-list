@@ -16,7 +16,7 @@
           QuickList
         </h1>
         <img
-          src="../../../public/quickBlue.png"
+          src="/quickBlue.png"
           alt="QuickList Logo"
           class="w-24 md:w-32 lg:w-40 h-auto"
         />

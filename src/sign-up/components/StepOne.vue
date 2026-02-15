@@ -42,9 +42,9 @@
 
 <script setup lang="ts">
 import { computed } from "vue";
-import ButtonForm from "../../common/inputs/ButtonForm.vue";
-import DatePicker from "../../common/inputs/DatePicker.vue";
-import InputForm from "../../common/inputs/InputForm.vue";
+import ButtonForm from "../../common/components/inputs/ButtonForm.vue";
+import DatePicker from "../../common/components/inputs/DatePicker.vue";
+import InputForm from "../../common/components/inputs/InputForm.vue";
 import type { IRegisterData } from "../interfaces/register.interface";
 
 // Props y emits para v-model y navegación

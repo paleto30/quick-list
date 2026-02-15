@@ -90,7 +90,7 @@ export const useRegister = (
         let message = result.error?.message || "Error al procesar el codigo.";
         handleAlert(`${message} ❌`);
         userStore.cleanUser();
-        router.push({ name: "Register" });
+        router.push({ name: "register" });
         return;
       }
 
